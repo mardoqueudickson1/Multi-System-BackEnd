@@ -1,13 +1,16 @@
 import { Knex } from 'knex';
 import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const config: Knex.Config = {
   client: 'postgresql',
   connection: {
-    host: 'localhost',
-    user: 'mardoqueu',
-    password: 'palavra',
-    database: 'knexdb',
+    host: process.env.DB_HOST,
+    user: process.env.DD_USER,
+    password: process.env.DD_PASSWORD,
+    database: process.env.DB,
   },
 
   migrations: {
