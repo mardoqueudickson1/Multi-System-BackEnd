@@ -9,7 +9,7 @@ const config: Knex.Config = {
   connection: {
     host: process.env.DB_HOST,
     user: process.env.DD_USER,
-    password: process.env.DD_PASSWORD,
+    password: 'palavra',
     database: process.env.DB,
   },
 

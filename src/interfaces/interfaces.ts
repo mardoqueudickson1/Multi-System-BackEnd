@@ -11,9 +11,13 @@ export interface EmpresaPai {
 
 export interface EmpresaFilha {
   id: number;
-  nome: string;
-  departamento: Departamento[];
   empresaPai: EmpresaPai;
+  nome: string;
+  email: string;
+  telefone: string;
+  especialidade: string;
+  endereco: string;
+  departamento: Departamento[];
 }
 
 export interface Departamento {
@@ -21,6 +25,12 @@ export interface Departamento {
   nome: string;
   funcionarios: Funcionario[];
   empresaFilha: EmpresaFilha;
+}
+
+export interface Role {
+  id: string;
+  nome: string;
+  descricao: string;
 }
 
 export interface Funcionario {

@@ -1,5 +1,5 @@
 import Router from 'express';
-import EmpresaController from '../../src/controllers/empresaController';
+import EmpresaController from '../controllers/empresaFilhaController';
 
 const router = Router();
 
