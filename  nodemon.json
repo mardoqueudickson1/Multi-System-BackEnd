@@ -1,0 +1,6 @@
+{
+    "watch": [".", "src", "config", "public"],
+    "ext": "ts,json",
+    "exec": "ts-node server.ts"
+  }
+  

@@ -1,6 +1,7 @@
 import express, { Application } from 'express';
-import './knex/config/dabase';
+import './src/config/database';
 
+import empresaRoute from './src/routes/empresaRoutes';
 // Classe da aplicação principal
 export class App {
   public app: Application;
@@ -17,7 +18,7 @@ export class App {
   }
 
   private routes(): void {
-    this.app.use('/api/users');
+    this.app.use('/', empresaRoute);
   }
 }
 
