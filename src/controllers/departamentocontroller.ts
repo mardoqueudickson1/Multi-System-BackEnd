@@ -4,10 +4,11 @@ import { Departamento } from 'src/interfaces/interfaces';
 
 //Classe principal
 export class DepartamentoController {
-  public async index(_req: Request, res: Response): Promise<void> {
+  public async index(req: Request, res: Response): Promise<void> {
+    const id = Number(req.params.id);
     try {
-      const empresa = await db<Departamento>('empresa');
-      res.json(empresa);
+      const departamento = await db<Departamento>('departamento').where({ id });
+      res.json(departamento);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
     }
@@ -16,9 +17,9 @@ export class DepartamentoController {
   //Mostra o Departamento
   public async show(_req: Request, res: Response): Promise<void> {
     try {
-      const empresas = await db<Departamento>('departamento').select('*');
+      const departamentos = await db<Departamento>('departamento').select('*');
 
-      res.status(201).json(empresas);
+      res.status(201).json(departamentos);
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: 'Erro no servidor' });

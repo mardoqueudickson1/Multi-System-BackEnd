@@ -28,7 +28,7 @@ export interface Departamento {
 }
 
 export interface Role {
-  id: string;
+  id: number;
   nome: string;
   descricao: string;
 }
@@ -38,4 +38,22 @@ export interface Funcionario {
   nome: string;
   salario: number;
   departamento: Departamento;
+}
+
+export interface Transaction {
+  id: number;
+  valor: number;
+  date: Date;
+  descricao: string;
+  tipo: 'receita' | 'despesa' | 'compra de ativo' | 'pagamento de divida';
+  empresa_filha_id: number;
+}
+export interface Contas {
+  descricao: string;
+  tipo: 'ativos ' | 'passivos';
+}
+
+export interface Contas_Transacoes {
+  id_conta: number;
+  id_transacao: number;
 }

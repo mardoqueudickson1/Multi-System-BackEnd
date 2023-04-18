@@ -4,9 +4,10 @@ import { EmpresaFilha } from 'src/interfaces/interfaces';
 
 //Classe principal
 export class FuncionarioController {
-  public async index(_req: Request, res: Response): Promise<void> {
+  public async index(req: Request, res: Response): Promise<void> {
+    const id = Number(req.params.id);
     try {
-      const empresa = await db<EmpresaFilha>('empresa');
+      const empresa = await db<EmpresaFilha>('funcionario').where({ id });
       res.json(empresa);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
