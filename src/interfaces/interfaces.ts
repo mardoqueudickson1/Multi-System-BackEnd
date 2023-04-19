@@ -43,7 +43,6 @@ export interface Funcionario {
 export interface Transaction {
   id: number;
   valor: number;
-  date: Date;
   descricao: string;
   tipo: 'receita' | 'despesa' | 'compra de ativo' | 'pagamento de divida';
   empresa_filha_id: number;

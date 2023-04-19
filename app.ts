@@ -7,6 +7,7 @@ import departamentoRoutes from './src/routes/departamentoRoutes';
 import roleroutes from './src/routes/roleRoutes';
 import contasRouter from './src/routes/contasRouter';
 import funcionarioRoutes from './src/routes/funcionarioRoutes';
+import transaction from './src/routes/transactionRoutes';
 
 // Classe da aplicação principal
 export class App {
@@ -30,6 +31,7 @@ export class App {
     this.app.use('/funcionario', funcionarioRoutes);
     this.app.use('/role', roleroutes);
     this.app.use('/contas', contasRouter);
+    this.app.use('/transacoes', transaction);
   }
 }
 
