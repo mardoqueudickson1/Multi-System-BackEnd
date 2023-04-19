@@ -1,13 +1,13 @@
 import express, { Application } from 'express';
 import './src/config/database';
 
-import empresaRoute from './src/routes/empresaRoutes';
-import EmpresaFilhaRoutes from './src/routes/empresaFilhaRoutes';
-import departamentoRoutes from './src/routes/departamentoRoutes';
-import roleroutes from './src/routes/roleRoutes';
-import contasRouter from './src/routes/contasRouter';
-import funcionarioRoutes from './src/routes/funcionarioRoutes';
-import transaction from './src/routes/transactionRoutes';
+import empresaRoute from './src/routes/empresas/empresaRoutes';
+import EmpresaFilhaRoutes from './src/routes/empresas/empresaFilhaRoutes';
+import departamentoRoutes from './src/routes/departamentos/departamentoRoutes';
+import roleroutes from './src/routes/funcionario&Roles/roleRoutes';
+import contasRouter from './src/routes/contas/contasRouter';
+import funcionarioRoutes from './src/routes/funcionario&Roles/funcionarioRoutes';
+import transaction from './src/routes/transacoes/transactionRoutes';
 
 // Classe da aplicação principal
 export class App {

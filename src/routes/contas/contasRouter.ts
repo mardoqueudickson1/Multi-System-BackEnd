@@ -1,5 +1,5 @@
 import Router from 'express';
-import ContasController from '../controllers/contasControlle';
+import ContasController from '../../controllers/contas/contasControlle';
 
 const router = Router();
 

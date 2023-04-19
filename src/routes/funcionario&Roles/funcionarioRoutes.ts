@@ -1,5 +1,5 @@
 import Router from 'express';
-import funcionarioController from '../controllers/funcionarioController';
+import funcionarioController from '../../controllers/funcionario&Roles/funcionarioController';
 
 const router = Router();
 

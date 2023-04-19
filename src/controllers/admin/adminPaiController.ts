@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import db from '../config/database';
+import db from '../../config/database';
 import { EmpresaFilha } from 'src/interfaces/interfaces';
 
 //Classe principal

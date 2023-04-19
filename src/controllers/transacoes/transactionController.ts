@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import db from '../config/database';
-import { Transaction } from '../interfaces/interfaces';
+import db from '../../config/database';
+import { Transaction } from '../../interfaces/interfaces';
 
 export class TransacoesController {
   // Listagem de transações

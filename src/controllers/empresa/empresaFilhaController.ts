@@ -1,22 +1,22 @@
 import { Request, Response } from 'express';
-import db from '../config/database';
-import { EmpresaPai } from 'src/interfaces/interfaces';
+import db from '../../config/database';
+import { EmpresaFilha } from 'src/interfaces/interfaces';
 
 //Classe principal
-export class EmpresaController {
+export class EmpresaFilhaController {
   public async index(_req: Request, res: Response): Promise<void> {
     try {
-      const empresas = await db<EmpresaPai>('empresa');
-      res.json(empresas);
+      const empresa = await db<EmpresaFilha>('empresa');
+      res.json(empresa);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
     }
   }
 
-  //Mostra a empresa Pai
+  //Mostra a empresa filha
   public async show(_req: Request, res: Response): Promise<void> {
     try {
-      const empresas = await db<EmpresaPai>('empresa_pai').select('*');
+      const empresas = await db<EmpresaFilha>('empresa_filha').select('*');
 
       res.status(201).json(empresas);
     } catch (error) {
@@ -25,19 +25,12 @@ export class EmpresaController {
     }
   }
 
-  //Cria a empresa Pai
+  //Cria a empresa filha
   public async create(req: Request, res: Response): Promise<void> {
-    const { nome, nif, email, telefone, especialidade, endereco } = req.body;
+    const { email } = req.body;
     try {
-      await db<EmpresaPai>('empresa_pai').insert({
-        nome,
-        email,
-        nif,
-        telefone,
-        especialidade,
-        endereco,
-      });
-      const novo = await db<EmpresaPai>('empresa_pai').where({ email });
+      await db<EmpresaFilha>('empresa_filha').insert(req.body);
+      const novo = await db<EmpresaFilha>('empresa_filha').where({ email });
       res.status(201).json(novo);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor ao criar' });
@@ -47,16 +40,14 @@ export class EmpresaController {
 
   public async update(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
-    const { nome, email, nif, telefone, especialidade, endereco } = req.body;
+
     try {
-      const rowsUpdated = await db<EmpresaPai>('empresas')
-        .where({ id })
-        .update({ nome, email, nif, telefone, especialidade, endereco });
+      const rowsUpdated = await db<EmpresaFilha>('empresa_filha').where({ id }).update(req.body);
       if (rowsUpdated === 0) {
         res.status(404).json({ message: 'Empresa not found' });
         return;
       }
-      const empresa = await db<EmpresaPai>('empresas').where({ id }).first();
+      const empresa = await db<EmpresaFilha>('empresa_filha').where({ id }).first();
       res.json(empresa);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
@@ -66,7 +57,7 @@ export class EmpresaController {
   public async destroy(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     try {
-      const rowsDeleted = await db<EmpresaPai>('empresas').where({ id }).delete();
+      const rowsDeleted = await db<EmpresaFilha>('empresa_filha').where({ id }).delete();
       if (rowsDeleted === 0) {
         res.status(404).json({ message: 'Empresa not found' });
         return;
@@ -78,4 +69,4 @@ export class EmpresaController {
   }
 }
 
-export default new EmpresaController();
+export default new EmpresaFilhaController();
