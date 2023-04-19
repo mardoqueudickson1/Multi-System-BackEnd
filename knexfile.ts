@@ -7,10 +7,10 @@ dotenv.config();
 const config: Knex.Config = {
   client: 'postgresql',
   connection: {
-    host: process.env.DB_HOST,
-    user: process.env.DD_USER,
-    password: 'palavra',
-    database: process.env.DB,
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE,
   },
 
   migrations: {
