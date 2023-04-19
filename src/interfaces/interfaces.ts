@@ -56,3 +56,20 @@ export interface Contas_Transacoes {
   id_conta: number;
   id_transacao: number;
 }
+
+export interface AdminFilho {
+  empresa_filha_id: number;
+  role_id: number;
+  nome: string;
+  sobrenome: string;
+  email: string;
+  nif: string;
+  telefone: string;
+  password_hash: string;
+  data_de_nascimento: Date;
+  data_de_contratacao: Date;
+  educacao: string;
+  bio: string;
+  linguas_falada: string;
+  endereco: string;
+}

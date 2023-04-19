@@ -7,17 +7,17 @@ export class FuncionarioController {
   public async index(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     try {
-      const empresa = await db<EmpresaFilha>('funcionario').where({ id });
+      const empresa = await db<EmpresaFilha>('admin_pai').where({ id });
       res.json(empresa);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
     }
   }
 
-  //Mostra a empresa filha
+  //Mostra a empresa todos admins
   public async show(_req: Request, res: Response): Promise<void> {
     try {
-      const empresas = await db<EmpresaFilha>('funcionario').select('*');
+      const empresas = await db<EmpresaFilha>('admin_pai').select('*');
 
       res.status(201).json(empresas);
     } catch (error) {
@@ -30,8 +30,8 @@ export class FuncionarioController {
   public async create(req: Request, res: Response): Promise<void> {
     const { email } = req.body;
     try {
-      await db<EmpresaFilha>('funcionario').insert(req.body);
-      const novo = await db<EmpresaFilha>('funcionario').where({ email });
+      await db<EmpresaFilha>('admin_pai').insert(req.body);
+      const novo = await db<EmpresaFilha>('admin_pai').where({ email });
       res.status(201).json(novo);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor ao criar' });
@@ -71,3 +71,5 @@ export class FuncionarioController {
 }
 
 export default new FuncionarioController();
+
+// #TODO estou trablhando

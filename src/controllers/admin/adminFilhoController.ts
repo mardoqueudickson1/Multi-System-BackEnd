@@ -1,25 +1,26 @@
 import { Request, Response } from 'express';
+import { generateHash } from '../../utils/hashPassWord';
 import db from '../../config/database';
-import { EmpresaFilha } from 'src/interfaces/interfaces';
+import { AdminFilho } from 'src/interfaces/interfaces';
 
 //Classe principal
-export class FuncionarioController {
-  public async index(req: Request, res: Response): Promise<void> {
-    const id = Number(req.params.id);
-    try {
-      const empresa = await db<EmpresaFilha>('funcionario').where({ id });
-      res.json(empresa);
-    } catch (error) {
-      res.status(500).json({ message: 'Erro do servidor' });
-    }
-  }
+export class AdminFilhoController {
+  // public async index(req: Request, res: Response): Promise<void> {
+  //   const id = Number(req.params.id);
+  //   try {
+  //     const empresa = await db<AdminFilho>('funcionario').where({ id });
+  //     res.json(empresa);
+  //   } catch (error) {
+  //     res.status(500).json({ message: 'Erro do servidor' });
+  //   }
+  // }
 
   //Mostra a empresa filha
   public async show(_req: Request, res: Response): Promise<void> {
     try {
-      const empresas = await db<EmpresaFilha>('funcionario').select('*');
+      const admins = await db<AdminFilho>('admin_filho').select('*');
 
-      res.status(201).json(empresas);
+      res.status(201).json(admins);
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: 'Erro no servidor' });
@@ -28,10 +29,45 @@ export class FuncionarioController {
 
   //Cria a empresa filha
   public async create(req: Request, res: Response): Promise<void> {
-    const { email } = req.body;
+    const {
+      empresa_filha_id,
+      role_id,
+      nome,
+      sobrenome,
+      email,
+      nif,
+      telefone,
+      password_hash,
+      data_de_nascimento,
+      data_de_contratacao,
+      educacao,
+      bio,
+      linguas_falada,
+      endereco,
+    } = req.body;
+
+    const senha: string = generateHash(password_hash);
+    console.log('AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII');
+    console.log(senha);
+
     try {
-      await db<EmpresaFilha>('funcionario').insert(req.body);
-      const novo = await db<EmpresaFilha>('funcionario').where({ email });
+      await db<AdminFilho>('admin_filho').insert({
+        empresa_filha_id,
+        role_id,
+        nome,
+        sobrenome,
+        email,
+        nif,
+        telefone,
+        password_hash: senha,
+        data_de_nascimento,
+        data_de_contratacao,
+        educacao,
+        bio,
+        linguas_falada,
+        endereco,
+      });
+      const novo = await db<AdminFilho>('admin_filho').where({ email });
       res.status(201).json(novo);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor ao criar' });
@@ -39,35 +75,35 @@ export class FuncionarioController {
     }
   }
 
-  public async update(req: Request, res: Response): Promise<void> {
-    const id = Number(req.params.id);
+  // public async update(req: Request, res: Response): Promise<void> {
+  //   const id = Number(req.params.id);
 
-    try {
-      const rowsUpdated = await db<EmpresaFilha>('funcionario').where({ id }).update(req.body);
-      if (rowsUpdated === 0) {
-        res.status(404).json({ message: 'Empresa not found' });
-        return;
-      }
-      const empresa = await db<EmpresaFilha>('funcionario').where({ id }).first();
-      res.json(empresa);
-    } catch (error) {
-      res.status(500).json({ message: 'Erro do servidor' });
-    }
-  }
+  //   try {
+  //     const rowsUpdated = await db<AdminFilho>('adminFilho').where({ id }).update(req.body);
+  //     if (rowsUpdated === 0) {
+  //       res.status(404).json({ message: 'Empresa not found' });
+  //       return;
+  //     }
+  //     const empresa = await db<AdminFilho>('adminFilho').where({ id }).first();
+  //     res.json(empresa);
+  //   } catch (error) {
+  //     res.status(500).json({ message: 'Erro do servidor' });
+  //   }
+  // }
 
-  public async destroy(req: Request, res: Response): Promise<void> {
-    const id = Number(req.params.id);
-    try {
-      const rowsDeleted = await db<EmpresaFilha>('funcionario').where({ id }).delete();
-      if (rowsDeleted === 0) {
-        res.status(404).json({ message: 'Empresa not found' });
-        return;
-      }
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ message: 'Erro do servidor' });
-    }
-  }
+  // public async destroy(req: Request, res: Response): Promise<void> {
+  //   const id = Number(req.params.id);
+  //   try {
+  //     const rowsDeleted = await db<AdminFilho>('adminFilho').where({ id }).delete();
+  //     if (rowsDeleted === 0) {
+  //       res.status(404).json({ message: 'Empresa not found' });
+  //       return;
+  //     }
+  //     res.status(204).send();
+  //   } catch (error) {
+  //     res.status(500).json({ message: 'Erro do servidor' });
+  //   }
+  // }
 }
 
-export default new FuncionarioController();
+export default new AdminFilhoController();
