@@ -3,7 +3,8 @@ import { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('admin_pai', (table) => {
     table.increments('id').primary();
-    table.integer('empresa_pai_id').unsigned();
+    table.integer('empresa_pai_id').unsigned().notNullable();
+    table.foreign('empresa_pai_id').references('empresa_pai.id');
     table.string('nome', 255).notNullable();
     table.string('sobrenome', 255).notNullable();
     table.string('email', 255).notNullable().unique();

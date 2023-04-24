@@ -39,7 +39,6 @@ export class TransacoesController {
         .returning('id');
       console.log(`AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII: ${id}`);
       console.log(id.id);
-      const ID = id.id;
       await db('contas_transacoes').insert({
         id_conta: conta_id,
         id_transacao: id.id,
@@ -53,7 +52,7 @@ export class TransacoesController {
           novoSaldo = conta.saldo + valor;
         } else if (conta.tipo === 'passivo') {
           if (valor > conta.saldo) {
-            await db('transacoes').where({ ID }).delete();
+            await db('transacoes').where({ id: id.id }).delete();
 
             return res.status(400).json({ message: 'O valor é maior que o saldo atual!' });
           }
@@ -70,9 +69,9 @@ export class TransacoesController {
           novoSaldo = conta.saldo + valor;
         }
       }
-      const arrayLiteral = `{${novoSaldo}}`;
+      const arrayLiteral = novoSaldo;
 
-      await db('contas').where('id', conta_id).update({
+      await db('contas').where({id: conta_id }).update({
         saldo: arrayLiteral,
       });
 

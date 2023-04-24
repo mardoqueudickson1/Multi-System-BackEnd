@@ -28,12 +28,12 @@ export class App {
   private routes(): void {
     this.app.use('/empresa', empresaRoute);
     this.app.use('/empresa/filha', EmpresaFilhaRoutes);
-    this.app.use('/departamento', departamentoRoutes);
-    this.app.use('/funcionario', funcionarioRoutes);
-    this.app.use('/role', roleroutes);
-    this.app.use('/contas', contasRouter);
-    this.app.use('/transacoes', transaction);
-    this.app.use('/adminfilho', adminFilho);
+    this.app.use('/empresa/filha/departamento', departamentoRoutes);
+    this.app.use('/empresa/filha/funcionario', funcionarioRoutes);
+    this.app.use('/empresa/filha/role', roleroutes);
+    this.app.use('/empresa/filha/conta', contasRouter);
+    this.app.use('/empresa/filha/transacoes', transaction);
+    this.app.use('/empresa/filha/admin', adminFilho);
   }
 }
 

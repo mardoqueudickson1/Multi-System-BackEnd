@@ -28,10 +28,12 @@ export class DepartamentoController {
 
   //Cria o departamento
   public async create(req: Request, res: Response): Promise<void> {
-    const { id } = req.body;
+    
     try {
-      await db<Departamento>('departamento').insert(req.body);
-      const novo = await db<Departamento>('departamento').where({ id });
+      const [ id ] =  await db<Departamento>('departamento').insert(req.body).returning('id');
+  
+      const novo = await db<Departamento>('departamento').where({ id: id.id });
+
       res.status(201).json(novo);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor ao criar' });

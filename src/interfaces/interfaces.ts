@@ -58,6 +58,7 @@ export interface Contas_Transacoes {
 }
 
 export interface AdminFilho {
+  id : number;
   empresa_filha_id: number;
   role_id: number;
   nome: string;
@@ -73,3 +74,9 @@ export interface AdminFilho {
   linguas_falada: string;
   endereco: string;
 }
+
+
+
+
+
+

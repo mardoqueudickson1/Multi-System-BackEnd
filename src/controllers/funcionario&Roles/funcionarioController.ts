@@ -28,10 +28,9 @@ export class FuncionarioController {
 
   //Cria a empresa filha
   public async create(req: Request, res: Response): Promise<void> {
-    const { email } = req.body;
     try {
-      await db<EmpresaFilha>('funcionario').insert(req.body);
-      const novo = await db<EmpresaFilha>('funcionario').where({ email });
+      const [id] = await db<EmpresaFilha>('funcionario').insert(req.body).returning('id');
+      const novo = await db<EmpresaFilha>('funcionario').where({ id: id.id });
       res.status(201).json(novo);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor ao criar' });

@@ -27,7 +27,7 @@ export class AdminFilhoController {
     }
   }
 
-  //Cria a empresa filha
+  //Cria a admin da empresa filha
   public async create(req: Request, res: Response): Promise<void> {
     const {
       empresa_filha_id,
@@ -51,7 +51,7 @@ export class AdminFilhoController {
     console.log(senha);
 
     try {
-      await db<AdminFilho>('admin_filho').insert({
+      const [id] =  await db<AdminFilho>('admin_filho').insert({
         empresa_filha_id,
         role_id,
         nome,
@@ -66,14 +66,17 @@ export class AdminFilhoController {
         bio,
         linguas_falada,
         endereco,
-      });
-      const novo = await db<AdminFilho>('admin_filho').where({ email });
+      }).returning('id');
+      
+      const novo = await db('admin_filho').where({ id: id.id });
       res.status(201).json(novo);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor ao criar' });
       console.log(error);
     }
   }
+
+
 
   // public async update(req: Request, res: Response): Promise<void> {
   //   const id = Number(req.params.id);
