@@ -9,6 +9,7 @@ import contasRouter from './src/routes/contas/contasRouter';
 import funcionarioRoutes from './src/routes/funcionario&Roles/funcionarioRoutes';
 import transaction from './src/routes/transacoes/transactionRoutes';
 import adminFilho from './src/routes/admin/adminFilho';
+import TokenRoutes  from './src/routes/tokens/tokenRoutes'
 
 // Classe da aplicação principal
 export class App {
@@ -34,6 +35,7 @@ export class App {
     this.app.use('/empresa/filha/conta', contasRouter);
     this.app.use('/empresa/filha/transacoes', transaction);
     this.app.use('/empresa/filha/admin', adminFilho);
+    this.app.use('/empresa/filha/token', TokenRoutes)
   }
 }
 
