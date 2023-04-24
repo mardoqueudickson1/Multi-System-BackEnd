@@ -7,17 +7,13 @@ dotenv.config();
 
 
 
-interface CustomRequest extends Request {
-    userId?: number;
-    userEmail: string
-  }
 
   interface TokenPayload extends JwtPayload {
     id: number;
     email: string;
   }
 
-export default async function authMiddleware(req: CustomRequest, res: Response, next: NextFunction) {
+export default async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const { authorization } = req.headers;
 
   // Verifica se o header de autorização foi enviado
@@ -45,9 +41,7 @@ export default async function authMiddleware(req: CustomRequest, res: Response, 
       });
     }
 
-    // Define o ID e o email do usuário na requisição
-    req.userId = id;
-    req.userEmail = email;
+  
 
     next();
   } catch (e) {
