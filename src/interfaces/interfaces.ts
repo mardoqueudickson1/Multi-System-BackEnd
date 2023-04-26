@@ -34,10 +34,23 @@ export interface Role {
 }
 
 export interface Funcionario {
-  id: number;
+  id : number;
+  departamento_id: number;
+  empresa_filha_id: number;
+  role_id: number;
   nome: string;
+  sobrenome: string;
+  email: string;
+  nif: string;
+  telefone: string;
+  password_hash: string;
   salario: number;
-  departamento: Departamento;
+  data_de_nascimento: Date;
+  data_de_contratacao: Date;
+  educacao: string;
+  bio: string;
+  linguas_falada: string;
+  endereco: string;
 }
 
 export interface Transaction {

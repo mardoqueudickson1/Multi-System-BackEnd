@@ -5,6 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     table.increments('id').primary();
     table.integer('empresa_pai_id').unsigned().notNullable();
     table.foreign('empresa_pai_id').references('empresa_pai.id');
+    table.integer('n_admin_filho', 50).notNullable().unique();
     table.string('nome', 255).notNullable();
     table.string('sobrenome', 255).notNullable();
     table.string('email', 255).notNullable().unique();

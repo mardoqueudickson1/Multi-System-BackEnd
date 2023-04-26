@@ -5,6 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     table.increments('id').primary();
     table.integer('empresa_filha_id').unsigned().notNullable();
     table.foreign('empresa_filha_id').references('empresa_filha.id');
+    table.integer('n_admin_filho', 50).notNullable().unique();
     table.integer('role_id').unsigned();
     table.foreign('role_id').references('role.id');
     table.string('nome', 255).notNullable();
@@ -13,6 +14,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('nif', 50).notNullable().unique();
     table.string('telefone', 50).notNullable();
     table.string('password_hash').notNullable();
+    table.integer('salario').notNullable()
     table.date('data_de_nascimento').notNullable();
     table.date('data_de_contratacao');
     table.string('educacao', 255);

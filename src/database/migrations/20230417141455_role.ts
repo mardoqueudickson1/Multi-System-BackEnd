@@ -7,11 +7,13 @@ export async function up(knex: Knex): Promise<void> {
     table.foreign('departamento_id').references('departamento.id');
     table.integer('role_id').unsigned();
     table.foreign('role_id').references('role.id');
+    table.integer('n_funcionario', 50).notNullable();
     table.string('nome', 255).notNullable();
     table.string('sobrenome', 255).notNullable();
     table.string('email', 255).notNullable().unique();
     table.string('nif', 50).notNullable().unique();
-    table.integer('telefone', 50).notNullable();
+    table.string('telefone', 50).notNullable();
+    table.string('password_hash').notNullable()
     table.date('data_de_nascimento');
     table.date('data_de_contratacao');
     table.integer('salario').notNullable();

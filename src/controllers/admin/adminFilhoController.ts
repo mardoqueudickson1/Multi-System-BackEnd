@@ -29,44 +29,26 @@ export class AdminFilhoController {
 
   //Cria a admin da empresa filha
   public async create(req: Request, res: Response): Promise<void> {
-    const {
-      empresa_filha_id,
-      role_id,
-      nome,
-      sobrenome,
-      email,
-      nif,
-      telefone,
-      password_hash,
-      data_de_nascimento,
-      data_de_contratacao,
-      educacao,
-      bio,
-      linguas_falada,
-      endereco,
-    } = req.body;
+    const password: string = "12345"
+      const senha: string = generateHash(password);
+        //Gera número aleatório para cada funcionário com prefixo do ano atual
+        const aleatorio = Math.floor(Math.random() * (10 + 20) + 10)
+        const aleatorio2 = Math.floor(Math.random() * (0 + 9) + 0)
 
-    const senha: string = generateHash(password_hash);
-    console.log('AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII');
-    console.log(senha);
+        const data = new Date
+        const ano = data.getFullYear();
+        const segundos = data.getSeconds();
+        let numero = [ano, aleatorio, segundos].join('');
+
+        if (numero.length < 8) numero = [ano, aleatorio, aleatorio2, segundos].join('');
+
+        //Pega dados no corpo do campo
+        let novoAdminFilho = req.body;
+        novoAdminFilho['n_admin_filho'] = numero
+        novoAdminFilho['password_hash'] = senha
 
     try {
-      const [id] =  await db<AdminFilho>('admin_filho').insert({
-        empresa_filha_id,
-        role_id,
-        nome,
-        sobrenome,
-        email,
-        nif,
-        telefone,
-        password_hash: senha,
-        data_de_nascimento,
-        data_de_contratacao,
-        educacao,
-        bio,
-        linguas_falada,
-        endereco,
-      }).returning('id');
+      const [id] =  await db<AdminFilho>('admin_filho').insert(novoAdminFilho).returning('id');
       
       const novo = await db('admin_filho').where({ id: id.id });
       res.status(201).json(novo);

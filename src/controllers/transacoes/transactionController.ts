@@ -3,9 +3,15 @@ import db from '../../config/database';
 import { Transaction } from '../../interfaces/interfaces';
 
 export class TransacoesController {
+
+  public async show(_req: Request, res:Response){
+    const dados = await db('transacoes').select('*')
+    res.status(201).json(dados)
+  }
   // Listagem de transações
   async index(request: Request, response: Response) {
     const { empresa_id } = request.query;
+    
     // Seleciona todas as transações da empresa com o id especificado
     const transacoes = await db<Transaction>('transacoes')
       .join('empresas', 'transacoes.id_empresa_filha', '=', 'empresas.id')
