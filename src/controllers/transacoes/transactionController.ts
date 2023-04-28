@@ -7,7 +7,7 @@ import { Transaction } from '../../interfaces/interfaces';
 export class TransacoesController {
   public async show(_req: Request, res: Response) {
     const dados = await db.raw(`
-      SELECT *, strftime('%d/%m/%Y', updated_at) as data_formatada 
+      SELECT *, strftime('%d-%m-%Y', updated_at) as data_formatada 
       FROM transacoes
     `)
   
@@ -21,8 +21,6 @@ export class TransacoesController {
   }
   
 
-
-
   // Listagem de transações
   async index(request: Request, response: Response) {
     const { empresa_id } = request.query;
@@ -33,7 +31,7 @@ export class TransacoesController {
       .select(
         'transacoes.*',
         'empresas.nome as nome_empresa',
-        db.raw("DATE_FORMAT(transacoes.updated_at, '%d/%m/%Y') as data_formatada")
+        db.raw("DATE_FORMAT(transacoes.updated_at, '%d-%m-%Y') as data_formatada")
       );
 
     return response.json(transacoes);
@@ -135,6 +133,21 @@ export class TransacoesController {
   //     contas,
   //   });
   // }
+
+  //Apaga a trasação
+  public async delete(req: Request, res: Response): Promise<void> {
+    const id = Number(req.params.id);
+    try {
+      const rowsDeleted = await db('transacoes').where({ id }).delete();
+      if (rowsDeleted === 0) {
+        res.status(404).json({ message: 'Transação not found' });
+        return;
+      }
+      res.status(204).send("APAGADO COM SUCESSO");
+    } catch (error) {
+      res.status(500).json({ message: 'Erro do servidor' });
+    }
+  }
 }
 
 export default new TransacoesController();
