@@ -6,28 +6,37 @@ import { Funcionario } from 'src/interfaces/interfaces';
 
 //Classe principal
 export class FuncionarioController {
-  public async index(req: Request, res: Response): Promise<void> {
+  public async show(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     try {
-      const empresa = await db<Funcionario>('funcionario').where({ id });
+      const empresa = await db<Funcionario>('funcionario')
+        .join('role', 'funcionario.role_id', '=', 'role.id')
+        .join('departamento', 'funcionario.departamento_id', '=', 'departamento.id')
+        .select('funcionario.*', 'role.nome AS nome_role', 'departamento.nome AS nome_departamento')
+        .where('funcionario.id', '=', id)
+        .first();
       res.json(empresa);
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ message: 'Erro do servidor' });
+    }
+  }
+  
+  
+
+  //Mostra a empresa filha
+  public async index(_req: Request, res: Response): Promise<void> {
+    try {
+      const funcionario = await db<Funcionario>('funcionario')
+        .join('role', 'funcionario.role_id', '=', 'role.id')
+        .join('departamento', 'funcionario.departamento_id', '=', 'departamento.id')
+        .select('funcionario.*', 'role.nome AS nome_role', 'departamento.nome AS nome_departamento');
+      res.json(funcionario);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
     }
   }
-
-  //Mostra a empresa filha
-  public async show(_req: Request, res: Response): Promise<void> {
-    try {
-     
-      const empresas = await db<Funcionario>('funcionario').select('*');
-
-      res.status(201).json(empresas);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: 'Erro no servidor' });
-    }
-  }
+  
 
   //Cria a funcionário
   public async create(req: Request, res: Response): Promise<void> {

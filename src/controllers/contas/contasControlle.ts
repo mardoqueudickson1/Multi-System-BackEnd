@@ -38,6 +38,20 @@ export class ContasController {
       console.log(error);
     }
   }
+
+  public async delete(req: Request, res: Response): Promise<void> {
+    const id = Number(req.params.id);
+    try {
+      const rowsDeleted = await db('contas').where({ id }).delete();
+      if (rowsDeleted === 0) {
+        res.status(404).json({ message: 'Empresa not found' });
+        return;
+      }
+      res.status(204).send("APAGADO COM SUCESSO");
+    } catch (error) {
+      res.status(500).json({ message: 'Erro do servidor' });
+    }
+  }
 }
 
 export default new ContasController();

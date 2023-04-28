@@ -4,7 +4,7 @@ import funcionarioController from '../../controllers/funcionario&Roles/funcionar
 const router = Router();
 
 router.post('/', funcionarioController.create);
-router.get('/', funcionarioController.show);
-router.get('/:id', funcionarioController.index);
+router.get('/:id', funcionarioController.show);
+router.get('/', funcionarioController.index);
 
 export default router;

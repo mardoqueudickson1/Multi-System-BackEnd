@@ -52,7 +52,21 @@ class TokenController {
     // Define os dados que serão armazenados no token
     const data = {
       id: user.id,
+      n_funcionario: user.n_funcionario,
       email: user.email,
+      sobrenome: user.sobrenome,
+      role_id: user.role_id,
+      departamento_id: user.departamento_id,
+      nif: user.nif,
+      telefone: user.telefone,
+      data_de_nascimento: user.data_de_nascimento,
+      data_de_contratacao: user.data_de_contratacao,
+      salario: user.salario,
+      educacao: user.educacao,
+      bio: user.bio,
+      linguas_falada: user.linguas_falada,
+      ativo: user.ativo,
+      endereco: user.endereco,
       entity
     }
     const secret = "123455"
@@ -69,6 +83,19 @@ class TokenController {
         nome: user.nome,
         id: user.id,
         email: user.email,
+        sobrenome: user.sobrenome,
+        role_id: user.role_id,
+        departamento_id: user.departamento_id,
+        nif: user.nif,
+        telefone: user.telefone,
+        data_de_nascimento: user.data_de_nascimento,
+        data_de_contratacao: user.data_de_contratacao,
+        salario: user.salario,
+        educacao: user.educacao,
+        bio: user.bio,
+        linguas_falada: user.linguas_falada,
+        ativo: user.ativo,
+        endereco: user.endereco,
         entity
       }
     });

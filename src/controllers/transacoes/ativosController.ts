@@ -20,17 +20,15 @@ async function calcularSaldo(contas: any[]): Promise<number> {
   }
   
   export default {
-    async index(_req: Request, res: Response) {
+
+
+    async ativos(_req: Request, res: Response){
       const contasAtivos = await db('contas').where('tipo', 'ativo');
       const saldoAtivos = await calcularSaldo(contasAtivos);
   
-      const contasPassivos = await db('contas').where('tipo', 'passivo');
-      const saldoPassivos = await calcularSaldo(contasPassivos);
-  
-      const balanco = saldoAtivos - saldoPassivos;
-  
-      return res.json({ balanco });
-    },
+      const ativo = saldoAtivos ;
 
-    
+      return res.json({ ativo });
+
+    }
   };

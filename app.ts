@@ -1,4 +1,5 @@
 import express, { Application } from 'express';
+import cors from 'cors';
 import './src/config/database';
 
 import empresaRoute from './src/routes/empresas/empresaRoutes';
@@ -11,6 +12,31 @@ import transaction from './src/routes/transacoes/transactionRoutes';
 import adminFilho from './src/routes/admin/adminFilho';
 import TokenRoutes  from './src/routes/tokens/tokenRoutes'
 import Balance from './src/routes/transacoes/balanceController'
+import AtivosRoutes from './src/routes/transacoes/ativosRoutes'
+import passivosRoutes from './src/routes/transacoes/passivosRoutes'
+
+
+
+const whiteList = [
+  'http://localhost:3000',
+];
+
+const corsOptions = {
+  origin: function (origin: any, callback: Function) {
+    if(whiteList.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
+
+// Função de middleware para adicionar um delay
+function delayMiddleware(_req: any, _res: any, next: Function) {
+  const delay = 2000; // Delay de 1 segundo
+  setTimeout(next, delay);
+}
 
 // Classe da aplicação principal
 export class App {
@@ -23,8 +49,10 @@ export class App {
   }
 
   private middlewares(): void {
+    this.app.use(cors(corsOptions));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(delayMiddleware);
   }
 
   private routes(): void {
@@ -38,6 +66,9 @@ export class App {
     this.app.use('/empresa/filha/admin', adminFilho);
     this.app.use('/empresa/filha/token', TokenRoutes);
     this.app.use('/empresa/filha/balanco', Balance);
+    this.app.use('/empresa/filha/ativos', AtivosRoutes)
+    this.app.use('/empresa/filha/passivos', passivosRoutes)
+
   }
 }
 
