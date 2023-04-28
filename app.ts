@@ -34,7 +34,7 @@ const corsOptions = {
 
 // Função de middleware para adicionar um delay
 function delayMiddleware(_req: any, _res: any, next: Function) {
-  const delay = 2000; // Delay de 1 segundo
+  const delay = 1000; // Delay de 1 segundo
   setTimeout(next, delay);
 }
 
