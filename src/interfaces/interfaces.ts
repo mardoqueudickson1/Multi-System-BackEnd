@@ -62,6 +62,8 @@ export interface Transaction {
 }
 export interface Contas {
   descricao: string;
+  empresa_filha_id: number;
+  saldo: number;
   tipo: 'ativos ' | 'passivos';
 }
 

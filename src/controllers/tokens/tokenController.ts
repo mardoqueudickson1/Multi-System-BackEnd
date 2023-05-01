@@ -13,6 +13,8 @@ class TokenController {
   async store(req: Request, res: Response) {
     const { email, password, entity } = req.body; // Recebe os dados de email, senha e tipo de entidade a ser autenticada
 
+    console.log(email, password, entity)
+
     // Verifica se os dados foram passados corretamente
     if (!email || !password || !entity) {
       return res.status(401).json({
@@ -20,6 +22,7 @@ class TokenController {
       });
     }
 
+   
     let table; // Variável para armazenar o nome da tabela da entidade a ser autenticada
 
     // Define o nome da tabela da entidade de acordo com o tipo passado na requisição
@@ -36,19 +39,30 @@ class TokenController {
         });
     }
 
+   
     // Faz uma consulta no banco de dados buscando um usuário com o email informado na tabela correspondente à entidade
     const [user] = await db(table).where('email', email);
 
+
     // Verifica se o usuário existe e se a senha informada está correta
+    if (!user) {
+
+      return res.status(401).json({
+        errors: ['Credenciais inválidas na db']
+      });
+    }
+  
     const senhaCorreta = await bcrypt.compare(password, user.password_hash);
 
-    if (!user || !senhaCorreta) {
+    if (!senhaCorreta) {
 
       return res.status(401).json({
         errors: ['Credenciais inválidas na db']
       });
     }
 
+
+    
     // Define os dados que serão armazenados no token
     const data = {
       id: user.id,

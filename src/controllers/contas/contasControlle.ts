@@ -28,9 +28,15 @@ export class ContasController {
 
   //Cria o contas
   public async create(req: Request, res: Response): Promise<void> {
-    const { id } = req.body;
+    const { id, descricao, tipo, empresa_filha_id } = req.body;
+    const saldo: number = 0;
     try {
-      await db<Contas>('contas').insert(req.body);
+      await db<Contas>('contas').insert({
+        descricao, 
+        tipo,
+        saldo: saldo, 
+        empresa_filha_id
+      });
       const novo = await db<Contas>('contas').where(id);
       res.status(201).json(novo);
     } catch (error) {

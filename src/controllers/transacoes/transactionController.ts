@@ -10,16 +10,16 @@ export class TransacoesController {
       SELECT *, strftime('%d-%m-%Y', updated_at) as data_formatada 
       FROM transacoes
     `)
-  
+
     // adiciona uma coluna "data_formatada" com a data formatada
     const dadosFormatados = dados.map((dado: { data_formatada: { toString: () => any; }; }) => ({
       ...dado,
       data_formatada: dado.data_formatada.toString() // converte a data para string
     }))
-  
+
     res.status(201).json(dadosFormatados)
   }
-  
+
 
   // Listagem de transações
   async index(request: Request, response: Response) {
@@ -41,14 +41,15 @@ export class TransacoesController {
   // Criação de transações
   async create(req: Request, res: Response) {
     try {
-      const { descricao, valor, tipo, empresa_filha_id, conta_id } = req.body;
+      const { descricao, valor, tipo, empresa_filha_id } = req.body;
+      console.log(valor)
 
       // Verifica se a conta informada pertence à empresa filha informada
-      const conta = await db('contas').where('id', conta_id).first();
+      
 
-      if (!conta) {
-        return res.status(400).json({ message: 'Conta não encontrada para a empresa filha informada.' });
-      }
+      // if (!conta) {
+      //   return res.status(400).json({ message: 'Conta não encontrada para a empresa filha informada.' });
+      // }
 
       // Cadastra a transação na tabela 'transacoes'
 
@@ -61,41 +62,38 @@ export class TransacoesController {
         })
         .returning('id');
 
-      await db('contas_transacoes').insert({
-        id_conta: conta_id,
-        id_transacao: id.id,
-      });
+      
 
-      let novoSaldo = 0;
-
-      // Atualiza o saldo da conta informada
+      // Atualiza o saldo da conta informada #TODO tenho de trabalhar aqui mais tarde
+      
       if (tipo === 'receita') {
-        if (conta.tipo === 'ativo') {
-          novoSaldo = conta.saldo + valor;
-        } else if (conta.tipo === 'passivo') {
-          if (valor > conta.saldo) {
-            await db('transacoes').where({ id: id.id }).delete();
-
-            return res.status(400).json({ message: 'O valor é maior que o saldo atual!' });
-          }
-          novoSaldo = conta.saldo - valor;
-        }
+        const conta = await db('contas').where('tipo', 'ativo').first();
+        const saldoAtual = conta.saldo;
+        const novoSaldo = saldoAtual + valor;
+        await db('contas').where('tipo', 'ativo').update({
+          saldo: novoSaldo,
+        });
+        await db('contas_transacoes').insert({
+          id_conta: conta.id,
+          id_transacao: id.id,
+        });
       } else if (tipo === 'despesa') {
-        if (conta.tipo === 'ativo') {
-          if (valor > conta.saldo) {
-            await db('transacoes').where({ id: id.id }).delete();
-            return res.status(400).json({ message: 'O valor é maior que o saldo atual!' });
-          }
-          novoSaldo = conta.saldo - valor;
-        } else if (conta.tipo === 'passivo') {
-          novoSaldo = conta.saldo + valor;
-        }
+        const conta = await db('contas').where('tipo', 'passivo').first();
+        const saldoAtual = conta.saldo;
+        const novoSaldo = saldoAtual - valor;
+        await db('contas').where('tipo', 'passivo').update({
+          saldo: novoSaldo,
+        });
+        await db('contas_transacoes').insert({
+          id_conta: conta.id,
+          id_transacao: id.id,
+        });
       }
-      const arrayLiteral = novoSaldo;
+      
+      
+      
 
-      await db('contas').where({ id: conta_id }).update({
-        saldo: arrayLiteral,
-      });
+
 
       return res.status(201).json('CADASTRADO com SUCESSO');
     } catch (error) {
