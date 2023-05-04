@@ -1,6 +1,6 @@
 import Router from 'express';
 import RoleController from '../../controllers/funcionario&Roles/roleController';
-import LoginRequired  from '../../middlewares/login/adminFilhoRequired'
+import LoginRequired  from '../../middlewares/login/loginRequired'
 
 const router = Router();
 

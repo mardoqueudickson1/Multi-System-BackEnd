@@ -24,7 +24,7 @@ export class TransacoesController {
   // Listagem de transações
   async index(request: Request, response: Response) {
     const { empresa_id } = request.query;
-
+  
     const transacoes = await db<Transaction>('transacoes')
       .join('empresas', 'transacoes.id_empresa_filha', '=', 'empresas.id')
       .where('transacoes.id_empresa_filha', String(empresa_id))
@@ -32,10 +32,13 @@ export class TransacoesController {
         'transacoes.*',
         'empresas.nome as nome_empresa',
         db.raw("DATE_FORMAT(transacoes.updated_at, '%d-%m-%Y') as data_formatada")
-      );
-
+      )
+      .orderBy('transacoes.id', 'desc');
+  
     return response.json(transacoes);
   }
+  
+  
 
 
   // Criação de transações

@@ -1,7 +1,9 @@
 import express, { Application } from 'express';
+import { resolve } from 'path';
 import cors from 'cors';
-import './src/config/database';
 
+
+import './src/config/database';
 import empresaRoute from './src/routes/empresas/empresaRoutes';
 import EmpresaFilhaRoutes from './src/routes/empresas/empresaFilhaRoutes';
 import departamentoRoutes from './src/routes/departamentos/departamentoRoutes';
@@ -14,7 +16,7 @@ import TokenRoutes  from './src/routes/tokens/tokenRoutes'
 import Balance from './src/routes/transacoes/balanceController'
 import AtivosRoutes from './src/routes/transacoes/ativosRoutes'
 import passivosRoutes from './src/routes/transacoes/passivosRoutes'
-
+import fotofuncionarioRouter from './src/routes/fotos/fotofuncionarioroutes'
 
 
 const whiteList = [
@@ -30,7 +32,6 @@ const corsOptions = {
     }
   }
 };
-
 
 // Função de middleware para adicionar um delay
 function delayMiddleware(_req: any, _res: any, next: Function) {
@@ -52,6 +53,7 @@ export class App {
     this.app.use(cors(corsOptions));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.static(resolve(__dirname, 'uploads')));
     this.app.use(delayMiddleware);
   }
 
@@ -68,6 +70,7 @@ export class App {
     this.app.use('/empresa/filha/balanco', Balance);
     this.app.use('/empresa/filha/ativos', AtivosRoutes)
     this.app.use('/empresa/filha/passivos', passivosRoutes)
+    this.app.use('/empresa/filha/foto', fotofuncionarioRouter)
 
   }
 }

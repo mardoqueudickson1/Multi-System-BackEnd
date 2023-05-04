@@ -1,8 +1,15 @@
 import { Request, Response } from 'express';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 import db from '../../config/database';
 import { generateHash } from '../../utils/hashPassWord';
-
 import { Funcionario } from 'src/interfaces/interfaces';
+
+
+const url = process.env.APP_URL;
+const port = process.env.APP_PORT;
 
 //Classe principal
 export class FuncionarioController {
@@ -24,18 +31,30 @@ export class FuncionarioController {
   
   
 
-  //Mostra a empresa filha
+  //Mostra todos funcionarios
   public async index(_req: Request, res: Response): Promise<void> {
     try {
       const funcionario = await db<Funcionario>('funcionario')
         .join('role', 'funcionario.role_id', '=', 'role.id')
         .join('departamento', 'funcionario.departamento_id', '=', 'departamento.id')
-        .select('funcionario.*', 'role.nome AS nome_role', 'departamento.nome AS nome_departamento');
-      res.json(funcionario);
+        .leftJoin('foto_funcionario', 'funcionario.id', '=', 'foto_funcionario.funcinario_id')
+        .select('funcionario.*', 'role.nome AS nome_role', 'departamento.nome AS nome_departamento', 'foto_funcionario.filename AS foto')
+        .orderBy('funcionario.id', 'desc');
+
+        const funcionariosComImagem = funcionario.map((f) => {
+          return {
+            ...f,
+            fotoUrl: f.foto ? `${url}${port}/images/${f.foto}` : null,
+          };
+        });
+        res.json(funcionariosComImagem);
     } catch (error) {
+      console.log(error)
       res.status(500).json({ message: 'Erro do servidor' });
     }
   }
+  
+  
   
 
   //Cria a funcionário
@@ -86,7 +105,7 @@ export class FuncionarioController {
     }
   }
 
-  public async destroy(req: Request, res: Response): Promise<void> {
+  public async delete(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     try {
       const rowsDeleted = await db<Funcionario>('funcionario').where({ id }).delete();

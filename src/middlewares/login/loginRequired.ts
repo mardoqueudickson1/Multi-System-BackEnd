@@ -31,11 +31,15 @@ export default async function authMiddleware(req: Request, res: Response, next: 
     const secretKey: Secret = process.env.TOKEN_SECRET || '';
     const decoded = jwt.verify(token, secretKey) as TokenPayload;
     const { id, email } = decoded;
+    console.log("AQUIIIIIIIIIIIIIIIIIIIIII")
+   
 
     // Busca o usuário no banco de dados
-    const user = await db('funcionario').where({ id, email }).first();
+    const user = await db('funcionario').where({ id: id, email: email }).first();
+    // const userAdmin = await db('admin_filho').where({ id: id, email: email  }).first();
+    
 
-    if (!user) {
+    if (!user ) {
       return res.status(401).json({
         errors: ['Usuário inválido']
       });
