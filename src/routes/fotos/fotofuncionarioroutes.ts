@@ -6,5 +6,7 @@ import loginRequired from '../../middlewares/login/loginRequired'
 const router = Router()
 
 router.post('/', loginRequired, fotoFuncionarioController.store)
+router.put('/', loginRequired, fotoFuncionarioController.update)
+
 
 export default router

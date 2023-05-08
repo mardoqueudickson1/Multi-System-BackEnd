@@ -13,16 +13,24 @@ const port = process.env.APP_PORT;
 
 //Classe principal
 export class FuncionarioController {
-  public async show(req: Request, res: Response): Promise<void> {
+  public async show(req: Request, res: any): Promise<void> {
     const id = Number(req.params.id);
     try {
-      const empresa = await db<Funcionario>('funcionario')
+      const funcionario = await db<Funcionario>('funcionario')
         .join('role', 'funcionario.role_id', '=', 'role.id')
         .join('departamento', 'funcionario.departamento_id', '=', 'departamento.id')
-        .select('funcionario.*', 'role.nome AS nome_role', 'departamento.nome AS nome_departamento')
+        .leftJoin('foto_funcionario', 'funcionario.id', '=', 'foto_funcionario.funcinario_id')
+        .select('funcionario.*', 'role.nome AS nome_role', 'departamento.nome AS nome_departamento', 'foto_funcionario.filename AS foto')
         .where('funcionario.id', '=', id)
         .first();
-      res.json(empresa);
+
+       
+          return res.status(200).json( {
+             ...funcionario, 
+             fotoUrl:funcionario.foto ? `${url}${port}/images/${funcionario.foto}` : null 
+            } )
+        
+      
     } catch (error) {
       console.log(error)
       res.status(500).json({ message: 'Erro do servidor' });
@@ -41,7 +49,7 @@ export class FuncionarioController {
         .select('funcionario.*', 'role.nome AS nome_role', 'departamento.nome AS nome_departamento', 'foto_funcionario.filename AS foto')
         .orderBy('funcionario.id', 'desc');
 
-        const funcionariosComImagem = funcionario.map((f) => {
+        const funcionariosComImagem = funcionario.map((f) => {  
           return {
             ...f,
             fotoUrl: f.foto ? `${url}${port}/images/${f.foto}` : null,

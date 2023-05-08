@@ -1,13 +1,14 @@
 import dotenv from 'dotenv';
 dotenv.config();
-// console.log(`TOKEN GERADO: ${process.env.TOKEN_SECRET}`);
+
 
 import bcrypt from 'bcryptjs';
 import db from '../../config/database';
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 
-
+const url = process.env.APP_URL;
+const port = process.env.APP_PORT;
 
 class TokenController {
   async store(req: Request, res: Response) {
@@ -22,7 +23,7 @@ class TokenController {
       });
     }
 
-   
+
     let table; // Variável para armazenar o nome da tabela da entidade a ser autenticada
 
     // Define o nome da tabela da entidade de acordo com o tipo passado na requisição
@@ -39,9 +40,15 @@ class TokenController {
         });
     }
 
-   
+
     // Faz uma consulta no banco de dados buscando um usuário com o email informado na tabela correspondente à entidade
-    const [user] = await db(table).where('email', email);
+    const [user] = await db(table)
+      .join('role', 'funcionario.role_id', '=', 'role.id')
+      .join('departamento', 'funcionario.departamento_id', '=', 'departamento.id')
+      .leftJoin('foto_funcionario', 'funcionario.id', '=', 'foto_funcionario.funcinario_id')
+      .select('funcionario.*', 'role.nome AS nome_role', 'departamento.nome AS nome_departamento', 'foto_funcionario.filename AS foto')
+      .where('email', email);
+    console.log(user)
 
 
     // Verifica se o usuário existe e se a senha informada está correta
@@ -51,7 +58,7 @@ class TokenController {
         errors: ['Credenciais inválidas na db']
       });
     }
-  
+
     const senhaCorreta = await bcrypt.compare(password, user.password_hash);
 
     if (!senhaCorreta) {
@@ -62,7 +69,7 @@ class TokenController {
     }
 
 
-    
+
     // Define os dados que serão armazenados no token
     const data = {
       id: user.id,
@@ -81,6 +88,9 @@ class TokenController {
       linguas_falada: user.linguas_falada,
       ativo: user.ativo,
       endereco: user.endereco,
+      nomeRole: user.nome_role,
+        nomeDepartamento: user.nome_departamento,
+      fotoUrl:user.foto ? `${url}${port}/images/${user.foto}` : null,
       entity
     }
     const secret = "123455"
@@ -110,6 +120,9 @@ class TokenController {
         linguas_falada: user.linguas_falada,
         ativo: user.ativo,
         endereco: user.endereco,
+        nomeRole: user.nome_role,
+        nomeDepartamento: user.nome_departamento,
+        fotoUrl:user.foto ? `${url}${port}/images/${user.foto}` : null,
         entity
       }
     });
