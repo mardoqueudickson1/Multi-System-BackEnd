@@ -32,10 +32,10 @@ export class ContasController {
     const saldo: number = 0;
     try {
       await db<Contas>('contas').insert({
-        descricao, 
+        descricao,
         tipo,
-        saldo: saldo, 
-        empresa_filha_id
+        saldo: saldo,
+        empresa_filha_id,
       });
       const novo = await db<Contas>('contas').where(id);
       res.status(201).json(novo);
@@ -53,7 +53,7 @@ export class ContasController {
         res.status(404).json({ message: 'Empresa not found' });
         return;
       }
-      res.status(204).send("APAGADO COM SUCESSO");
+      res.status(204).send('APAGADO COM SUCESSO');
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
     }

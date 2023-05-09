@@ -1,4 +1,5 @@
 .env
+/dist
 .gitignore
 node_modules
 package-lock

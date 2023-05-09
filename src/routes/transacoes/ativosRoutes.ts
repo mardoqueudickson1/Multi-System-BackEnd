@@ -1,8 +1,8 @@
-import Router  from 'express'
-import ativiosController from '../../controllers/transacoes/ativosController'
+import Router from 'express';
+import ativiosController from '../../controllers/transacoes/ativosController';
 
-const router = Router()
+const router = Router();
 
-router.get('/', ativiosController.ativos)
+router.get('/', ativiosController.ativos);
 
-export default router
+export default router;

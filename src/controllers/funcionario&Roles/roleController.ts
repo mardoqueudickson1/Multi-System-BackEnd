@@ -30,7 +30,7 @@ export class RoleController {
   //Role
   public async create(req: Request, res: Response): Promise<void> {
     try {
-     const [id] =  await db<Role>('role').insert(req.body).returning('id');
+      const [id] = await db<Role>('role').insert(req.body).returning('id');
       const novo = await db<Role>('role').where({ id: id.id });
       res.status(201).json(novo);
     } catch (error) {

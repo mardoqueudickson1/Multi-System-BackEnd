@@ -2,7 +2,6 @@ import express, { Application } from 'express';
 import { resolve } from 'path';
 import cors from 'cors';
 
-
 import './src/config/database';
 import empresaRoute from './src/routes/empresas/empresaRoutes';
 import EmpresaFilhaRoutes from './src/routes/empresas/empresaFilhaRoutes';
@@ -12,25 +11,22 @@ import contasRouter from './src/routes/contas/contasRouter';
 import funcionarioRoutes from './src/routes/funcionario&Roles/funcionarioRoutes';
 import transaction from './src/routes/transacoes/transactionRoutes';
 import adminFilho from './src/routes/admin/adminFilho';
-import TokenRoutes  from './src/routes/tokens/tokenRoutes'
-import Balance from './src/routes/transacoes/balanceController'
-import AtivosRoutes from './src/routes/transacoes/ativosRoutes'
-import passivosRoutes from './src/routes/transacoes/passivosRoutes'
-import fotofuncionarioRouter from './src/routes/fotos/fotofuncionarioroutes'
+import TokenRoutes from './src/routes/tokens/tokenRoutes';
+import Balance from './src/routes/transacoes/balanceController';
+import AtivosRoutes from './src/routes/transacoes/ativosRoutes';
+import passivosRoutes from './src/routes/transacoes/passivosRoutes';
+import fotofuncionarioRouter from './src/routes/fotos/fotofuncionarioroutes';
 
-
-const whiteList = [
-  'http://localhost:3000',
-];
+const whiteList = ['http://localhost:3000'];
 
 const corsOptions = {
   origin: function (origin: any, callback: Function) {
-    if(whiteList.indexOf(origin) !== -1 || !origin) {
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
-  }
+  },
 };
 
 // Função de middleware para adicionar um delay
@@ -68,11 +64,14 @@ export class App {
     this.app.use('/empresa/filha/admin', adminFilho);
     this.app.use('/empresa/filha/token', TokenRoutes);
     this.app.use('/empresa/filha/balanco', Balance);
-    this.app.use('/empresa/filha/ativos', AtivosRoutes)
-    this.app.use('/empresa/filha/passivos', passivosRoutes)
-    this.app.use('/empresa/filha/foto', fotofuncionarioRouter)
-
+    this.app.use('/empresa/filha/ativos', AtivosRoutes);
+    this.app.use('/empresa/filha/passivos', passivosRoutes);
+    this.app.use('/empresa/filha/foto', fotofuncionarioRouter);
   }
 }
 
 export default new App().app;
+
+
+
+

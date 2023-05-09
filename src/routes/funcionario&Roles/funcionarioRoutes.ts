@@ -8,5 +8,4 @@ router.get('/:id', funcionarioController.show);
 router.get('/', funcionarioController.index);
 router.delete('/:id', funcionarioController.delete);
 
-
 export default router;

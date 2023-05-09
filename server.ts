@@ -12,5 +12,4 @@ app.listen(port, () => {
   console.log(`API executando na porta ${port}`);
   console.log(`CTL + clique em ${url}${port}`);
   console.log();
-  
 });

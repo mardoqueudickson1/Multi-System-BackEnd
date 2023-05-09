@@ -1,2 +1,2 @@
-"use strict";
+'use strict';
 // import knex, {Model} from "knex";

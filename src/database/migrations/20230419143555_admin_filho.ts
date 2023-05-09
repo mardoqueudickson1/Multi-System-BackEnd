@@ -14,7 +14,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('nif', 50).notNullable().unique();
     table.string('telefone', 50).notNullable();
     table.string('password_hash').notNullable();
-    table.integer('salario').notNullable()
+    table.integer('salario').notNullable();
     table.date('data_de_nascimento').notNullable();
     table.date('data_de_contratacao');
     table.string('educacao', 255);
