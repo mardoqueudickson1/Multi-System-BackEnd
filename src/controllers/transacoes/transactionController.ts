@@ -42,14 +42,6 @@ export class TransacoesController {
       const { descricao, valor, tipo, empresa_filha_id } = req.body;
       console.log(valor);
 
-      // Verifica se a conta informada pertence à empresa filha informada
-
-      // if (!conta) {
-      //   return res.status(400).json({ message: 'Conta não encontrada para a empresa filha informada.' });
-      // }
-
-      // Cadastra a transação na tabela 'transacoes'
-
       const [id] = await db('transacoes')
         .insert({
           descricao,
@@ -75,7 +67,7 @@ export class TransacoesController {
       } else if (tipo === 'despesa') {
         const conta = await db('contas').where('tipo', 'passivo').first();
         const saldoAtual = conta.saldo;
-        const novoSaldo = saldoAtual - valor;
+        const novoSaldo = saldoAtual + valor;
         await db('contas').where('tipo', 'passivo').update({
           saldo: novoSaldo,
         });
