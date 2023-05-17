@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import express, { Application } from 'express';
+
 import { resolve } from 'path';
 import cors from 'cors';
 
@@ -16,6 +19,7 @@ import Balance from './src/routes/transacoes/balanceController';
 import AtivosRoutes from './src/routes/transacoes/ativosRoutes';
 import passivosRoutes from './src/routes/transacoes/passivosRoutes';
 import fotofuncionarioRouter from './src/routes/fotos/fotofuncionarioroutes';
+import estoquecontroller from './src/routes/estoque/estoqueRoutes';
 
 const whiteList = ['http://localhost:3000'];
 
@@ -67,6 +71,7 @@ export class App {
     this.app.use('/empresa/filha/ativos', AtivosRoutes);
     this.app.use('/empresa/filha/passivos', passivosRoutes);
     this.app.use('/empresa/filha/foto', fotofuncionarioRouter);
+    this.app.use('/empresa/filha/estoque', estoquecontroller);
   }
 }
 

@@ -3,7 +3,7 @@ import db from '../../config/database';
 import { Role } from 'src/interfaces/interfaces';
 
 //Classe principal
-export class RoleController {
+export class EstoqueController {
   public async index(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     try {
@@ -15,12 +15,12 @@ export class RoleController {
     }
   }
 
-  //Mostra a empresa filha
+  //Mostra a esoque filha
   public async show(_req: Request, res: Response): Promise<void> {
     try {
-      const empresas = await db<Role>('role').select('*');
+      const esoque = await db<Role>('role').select('*');
 
-      res.status(201).json(empresas);
+      res.status(201).json(esoque);
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: 'Erro do servidor ao pesquisar' });
@@ -46,11 +46,11 @@ export class RoleController {
     try {
       const rowsUpdated = await db<Role>('role').where(id).update(req.body);
       if (rowsUpdated === 0) {
-        res.status(404).json({ message: 'Empresa not found' });
+        res.status(404).json({ message: 'esoque not found' });
         return;
       }
-      const empresa = await db<Role>('role').where(id).first();
-      res.json(empresa);
+      const esoque = await db<Role>('role').where(id).first();
+      res.json(esoque);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
     }
@@ -61,7 +61,7 @@ export class RoleController {
     try {
       const rowsDeleted = await db<Role>('role').where(id).delete();
       if (rowsDeleted === 0) {
-        res.status(404).json({ message: 'Empresa not found' });
+        res.status(404).json({ message: 'esoque not found' });
         return;
       }
       res.status(204).send();
@@ -71,4 +71,6 @@ export class RoleController {
   }
 }
 
-export default new RoleController();
+export default new EstoqueController();
+
+//#TODO estou treabalhando no estoque

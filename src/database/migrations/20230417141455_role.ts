@@ -13,7 +13,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('email', 255).notNullable().unique();
     table.string('nif', 50).notNullable().unique();
     table.string('telefone', 50).notNullable();
-    table.string('password_hash').notNullable()
+    table.string('password_hash').notNullable();
     table.date('data_de_nascimento');
     table.date('data_de_contratacao');
     table.integer('salario').notNullable();

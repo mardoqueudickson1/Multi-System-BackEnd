@@ -7,7 +7,6 @@ import db from '../../config/database';
 import { generateHash } from '../../utils/hashPassWord';
 import { Funcionario } from 'src/interfaces/interfaces';
 
-
 const url = process.env.APP_URL;
 const port = process.env.APP_PORT;
 
@@ -24,12 +23,10 @@ export class FuncionarioController {
         .first();
       res.json(empresa);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).json({ message: 'Erro do servidor' });
     }
   }
-  
-  
 
   //Mostra todos funcionarios
   public async index(_req: Request, res: Response): Promise<void> {
@@ -38,47 +35,48 @@ export class FuncionarioController {
         .join('role', 'funcionario.role_id', '=', 'role.id')
         .join('departamento', 'funcionario.departamento_id', '=', 'departamento.id')
         .leftJoin('foto_funcionario', 'funcionario.id', '=', 'foto_funcionario.funcinario_id')
-        .select('funcionario.*', 'role.nome AS nome_role', 'departamento.nome AS nome_departamento', 'foto_funcionario.filename AS foto')
+        .select(
+          'funcionario.*',
+          'role.nome AS nome_role',
+          'departamento.nome AS nome_departamento',
+          'foto_funcionario.filename AS foto'
+        )
         .orderBy('funcionario.id', 'desc');
 
-        const funcionariosComImagem = funcionario.map((f) => {
-          return {
-            ...f,
-            fotoUrl: f.foto ? `${url}${port}/images/${f.foto}` : null,
-          };
-        });
-        res.json(funcionariosComImagem);
+      const funcionariosComImagem = funcionario.map((f) => {
+        return {
+          ...f,
+          fotoUrl: f.foto ? `${url}${port}/images/${f.foto}` : null,
+        };
+      });
+      res.json(funcionariosComImagem);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).json({ message: 'Erro do servidor' });
     }
   }
-  
-  
-  
 
   //Cria a funcionário
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      const password: string = "12345"
+      const password = '12345';
       const senha: string = generateHash(password);
-        //Gera número aleatório para cada funcionário com prefixo do ano atual
-        const aleatorio = Math.floor(Math.random() * (10 + 20) + 10)
-        const aleatorio2 = Math.floor(Math.random() * (0 + 9) + 0)
+      //Gera número aleatório para cada funcionário com prefixo do ano atual
+      const aleatorio = Math.floor(Math.random() * (10 + 20) + 10);
+      const aleatorio2 = Math.floor(Math.random() * (0 + 9) + 0);
 
-        const data = new Date
-        const ano = data.getFullYear();
-        const segundos = data.getSeconds();
-        let numero = [ano, aleatorio, segundos].join('');
+      const data = new Date();
+      const ano = data.getFullYear();
+      const segundos = data.getSeconds();
+      let numero = [ano, aleatorio, segundos].join('');
 
-        if (numero.length < 8) numero = [ano, aleatorio, aleatorio2, segundos].join('');
+      if (numero.length < 8) numero = [ano, aleatorio, aleatorio2, segundos].join('');
 
-        //Pega dados no corpo do campo
-        let novoFuncionario = req.body;
-        novoFuncionario['n_funcionario'] = numero
-        novoFuncionario['password_hash'] = senha
-        
-      
+      //Pega dados no corpo do campo
+      const novoFuncionario = req.body;
+      novoFuncionario['n_funcionario'] = numero;
+      novoFuncionario['password_hash'] = senha;
+
       const [id] = await db<Funcionario>('funcionario').insert(novoFuncionario).returning('id');
 
       const novo = await db<Funcionario>('funcionario').where({ id: id.id });
