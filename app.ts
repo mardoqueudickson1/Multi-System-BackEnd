@@ -21,7 +21,7 @@ import passivosRoutes from './src/routes/transacoes/passivosRoutes';
 import fotofuncionarioRouter from './src/routes/fotos/fotofuncionarioroutes';
 import estoquecontroller from './src/routes/estoque/estoqueRoutes';
 
-const whiteList = ['http://localhost:3000'];
+const whiteList = ['https://magenta-custard-5b07fc.netlify.app'];
 
 const corsOptions = {
   origin: function (origin: any, callback: Function) {
