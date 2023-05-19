@@ -5,20 +5,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const config: Knex.Config = {
-  // client: 'postgresql',
-  // connection: {
-  //   host: process.env.DATABASE_HOST,
-  //   user: process.env.DATABASE_USERNAME,
-  //   password: process.env.DATABASE_PASSWORD,
-  //   database: process.env.DATABASE,
-  // },
-
-  client: 'sqlite3',
+  client: process.env.NODE_ENV === 'production' ? 'postgresql' : 'sqlite3',
   connection: {
-    filename: './db.sqlite'
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE,
+    filename: process.env.NODE_ENV === 'production' ? undefined : './db.sqlite',
   },
   useNullAsDefault: true,
-
   migrations: {
     tableName: 'knex_migrations',
     directory: path.join(__dirname, 'src', 'database', 'migrations'),
