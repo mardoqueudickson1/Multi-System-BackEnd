@@ -7,10 +7,7 @@ dotenv.config();
 const config: Knex.Config = {
   client: process.env.NODE_ENV === 'production' ? 'postgresql' : 'sqlite3',
   connection: {
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE,
+    database: process.env.DATABASE_URL,
     filename: process.env.NODE_ENV === 'production' ? undefined : './db.sqlite',
   },
   useNullAsDefault: true,
@@ -24,3 +21,5 @@ const config: Knex.Config = {
 };
 
 export default config;
+
+//postgres://pottertestepg_user:xzKdyIkXYvdiJPfmVyLMLU2k5MB4UCEU@dpg-chjmagbhp8u4bdps2r5g-a/pottertestepg
