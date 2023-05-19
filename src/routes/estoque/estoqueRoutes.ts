@@ -4,8 +4,9 @@ import EstoqueController from '../../controllers/estoque/estoqueController';
 const router = Router();
 
 router.get('/', EstoqueController.index);
+router.get('/:id', EstoqueController.show);
 router.post('/', EstoqueController.create);
-router.put('/', EstoqueController.update);
-router.delete('/', EstoqueController.destroy);
+router.put('/:id', EstoqueController.update);
+router.delete('/:id', EstoqueController.destroy);
 
 export default router;

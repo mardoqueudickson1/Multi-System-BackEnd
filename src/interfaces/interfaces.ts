@@ -34,7 +34,7 @@ export interface Role {
 }
 
 export interface Funcionario {
-  id : number;
+  id: number;
   departamento_id: number;
   empresa_filha_id: number;
   role_id: number;
@@ -73,7 +73,7 @@ export interface Contas_Transacoes {
 }
 
 export interface AdminFilho {
-  id : number;
+  id: number;
   empresa_filha_id: number;
   role_id: number;
   nome: string;
@@ -90,8 +90,11 @@ export interface AdminFilho {
   endereco: string;
 }
 
-
-
-
-
-
+export interface Estoque {
+  id: number;
+  nome: string;
+  decricao: string;
+  categoria: string;
+  valor: number;
+  quantidade: number;
+}
