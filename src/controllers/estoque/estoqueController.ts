@@ -7,8 +7,9 @@ export class EstoqueController {
   public async show(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     try {
-      const departamento = await db<Estoque>('estoque').where({ id });
-      res.json(departamento);
+      const stock = await db<Estoque>('estoque').where({ id });
+      res.json(stock);
+      console.log('STOQUEEEEE"');
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
       console.log(error);

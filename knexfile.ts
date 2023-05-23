@@ -5,8 +5,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const config: Knex.Config = {
-  client: 'postgresql',
-  connection: process.env.DATABASE_URL,
+  client: 'sqlite3',
+  connection: {
+    filename: './db.sqlite',
+  },
+
+  // client: 'postgresql',
+  // connection: process.env.DATABASE_URL,
 
   migrations: {
     tableName: 'knex_migrations',
