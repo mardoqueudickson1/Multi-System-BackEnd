@@ -20,6 +20,8 @@ import AtivosRoutes from './src/routes/transacoes/ativosRoutes';
 import passivosRoutes from './src/routes/transacoes/passivosRoutes';
 import fotofuncionarioRouter from './src/routes/fotos/fotofuncionarioroutes';
 import estoquecontroller from './src/routes/estoque/estoqueRoutes';
+import totalProCadastradoRouter from './src/routes/estoque/totalProdCadastradosrouter';
+import totalProdutoValorRouter from './src/routes/estoque/totalValorRoutes';
 
 const whiteList = ['https://magenta-custard-5b07fc.netlify.app', 'http://localhost:3000'];
 
@@ -72,6 +74,8 @@ export class App {
     this.app.use('/empresa/filha/passivos', passivosRoutes);
     this.app.use('/empresa/filha/foto', fotofuncionarioRouter);
     this.app.use('/empresa/filha/estoque', estoquecontroller);
+    this.app.use('/empresa/filha/totalprodcadstradaos', totalProCadastradoRouter);
+    this.app.use('/empresa/filha/totalvalor', totalProdutoValorRouter);
   }
 }
 
