@@ -4,14 +4,29 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const config: Knex.Config = {
-  client: 'sqlite3',
-  connection: {
-    filename: './db.sqlite',
-  },
+const PORT_DB = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 0;
 
-  // client: 'postgresql',
-  // connection: process.env.DATABASE_URL,
+const developmentConfig: Knex.Config = {
+  client: 'postgresql',
+  connection: {
+    host: 'localhost',
+    port: PORT_DB,
+    database: process.env.DATABASE,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+  },
+  migrations: {
+    tableName: 'knex_migrations',
+    directory: path.join(__dirname, 'src', 'database', 'migrations'),
+  },
+  seeds: {
+    directory: path.join(__dirname, 'src', 'database', 'seeds'),
+  },
+};
+
+const productionConfig: Knex.Config = {
+  client: 'postgresql',
+  connection: process.env.DATABASE_URL,
 
   migrations: {
     tableName: 'knex_migrations',
@@ -22,4 +37,9 @@ const config: Knex.Config = {
   },
 };
 
+const config: Knex.Config = process.env.NODE_ENV === 'production' ? productionConfig : developmentConfig;
+
 export default config;
+
+
+//#TODO trabalhando aqui...

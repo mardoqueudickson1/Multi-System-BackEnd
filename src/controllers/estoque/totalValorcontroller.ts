@@ -16,18 +16,11 @@ export class TodalProdutoEstoqueController {
         currency: 'AOA',
         minimumFractionDigits: 2,
       }).format(Number(totalValue.total)).replace(/\s/g, '').replace(/(?<=\d)(?=(\d{3})+(?!\d))/g, '.').replace(/,/g, ',');
-      
-    
-      
-      
 
       res.status(200).json({ valor: formattedValue });
       } else {
         res.status(200).json({ valor: totalValue });
       }
-
-      
-
       
     } catch (error) {
       console.error('Erro ao somar os valores dos produtos:', error);
