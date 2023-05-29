@@ -7,9 +7,11 @@ export class EstoqueController {
   public async show(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     try {
-      const stock = await db<Estoque>('estoque').where({ id });
+      const stock = await db<Estoque>('estoque')
+        .select('estoque.*', 'fornecedor.nome as nome_fornecedor', 'fornecedor.telefone', 'fornecedor.endereco')
+        .join('fornecedor', 'estoque.fornecedor_id', 'fornecedor.id')
+        .where('estoque.id', id);
       res.json(stock);
-      console.log('STOQUEEEEE"');
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
       console.log(error);
@@ -17,21 +19,42 @@ export class EstoqueController {
   }
 
   //Mostra a estoque
-  public async index(_req: Request, res: Response): Promise<void> {
-    try {
-      const esoque = await db<Estoque>('estoque').select('*');
+  public async index(_req: Request, res: Response) {
+    const result = await db.raw(`
+      SELECT *, to_char(estoque.updated_at, 'DD-MM-YYYY') as data_formatada 
+      FROM estoque
+      ORDER BY estoque.updated_at DESC
+    `);
 
-      res.status(201).json(esoque);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: 'Erro do servidor ao pesquisar' });
+    if (result.rows.valor) {
+      console.log(result.rows.valor);
     }
+
+    const dados = result.rows.map((row: any) => ({
+      ...row,
+      data_formatada: row.data_formatada.toString(),
+    }));
+
+    res.status(201).json(dados);
   }
 
   //Faz cadastro no estoque
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      const [id] = await db<Estoque>('estoque').insert(req.body).returning('id');
+      const { nome, descricao, categoria, valor, quantidade, fornecedor } = req.body;
+
+      const [Fornecedor] = await db('fornecedor').insert(fornecedor).returning('id');
+
+      const [id] = await db('estoque')
+        .insert({
+          fornecedor_id: Fornecedor.id,
+          nome,
+          categoria,
+          descricao,
+          valor,
+          quantidade,
+        })
+        .returning('id');
       const novo = await db<Estoque>('estoque').where({ id: id.id });
       res.status(201).json(novo);
     } catch (error) {

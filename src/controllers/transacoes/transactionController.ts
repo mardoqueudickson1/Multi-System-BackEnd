@@ -1,54 +1,44 @@
 import { Request, Response } from 'express';
+import raw from 'knex';
 import db from '../../config/database';
 import { Transaction } from '../../interfaces/interfaces';
 // import { parseISO } from 'date-fns';
 
-
 export class TransacoesController {
   public async show(_req: Request, res: Response) {
-    const dados = await db.raw(`
-      SELECT *, strftime('%d-%m-%Y', updated_at) as data_formatada 
+    const result = await db.raw(`
+      SELECT *, to_char(transacoes.updated_at, 'DD-MM-YYYY') as data_formatada 
       FROM transacoes
-    `)
+      ORDER BY transacoes.updated_at DESC
+    `);
 
-    // adiciona uma coluna "data_formatada" com a data formatada
-    const dadosFormatados = dados.map((dado: { data_formatada: { toString: () => any; }; }) => ({
-      ...dado,
-      data_formatada: dado.data_formatada.toString() // converte a data para string
-    }))
+    const dados = result.rows.map((row: any) => ({
+      ...row,
+      data_formatada: row.data_formatada.toString(),
+    }));
 
-    res.status(201).json(dadosFormatados)
+    res.status(201).json(dados);
   }
-
 
   // Listagem de transações
-  async index(request: Request, response: Response) {
-    const { empresa_id } = request.query;
-  
-    const transacoes = await db<Transaction>('transacoes')
-      .join('empresas', 'transacoes.id_empresa_filha', '=', 'empresas.id')
-      .where('transacoes.id_empresa_filha', String(empresa_id))
-      .select(
-        'transacoes.*',
-        'empresas.nome as nome_empresa',
-        db.raw("DATE_FORMAT(transacoes.updated_at, '%d-%m-%Y') as data_formatada")
-      )
-      .orderBy('transacoes.id', 'desc');
-  
-    return response.json(transacoes);
-  }
-  
-  
 
+  async index(req: Request, res: Response) {
+    const id = Number(req.params.id);
+
+    const transacoes = await db<Transaction>('transacoes')
+      .select('transacoes.*', raw("to_char(transacoes.updated_at, 'DD-MM-YYYY') as data_formatada"))
+      .where({ id });
+
+    return res.json(transacoes);
+  }
 
   // Criação de transações
   async create(req: Request, res: Response) {
     try {
       const { descricao, valor, tipo, empresa_filha_id } = req.body;
-      console.log(valor)
+      console.log(valor);
 
       // Verifica se a conta informada pertence à empresa filha informada
-      
 
       // if (!conta) {
       //   return res.status(400).json({ message: 'Conta não encontrada para a empresa filha informada.' });
@@ -65,10 +55,8 @@ export class TransacoesController {
         })
         .returning('id');
 
-      
-
       // Atualiza o saldo da conta informada #TODO tenho de trabalhar aqui mais tarde
-      
+
       if (tipo === 'receita') {
         const conta = await db('contas').where('tipo', 'ativo').first();
         const saldoAtual = conta.saldo;
@@ -92,11 +80,6 @@ export class TransacoesController {
           id_transacao: id.id,
         });
       }
-      
-      
-      
-
-
 
       return res.status(201).json('CADASTRADO com SUCESSO');
     } catch (error) {
@@ -144,7 +127,7 @@ export class TransacoesController {
         res.status(404).json({ message: 'Transação not found' });
         return;
       }
-      res.status(204).send("APAGADO COM SUCESSO");
+      res.status(204).send('APAGADO COM SUCESSO');
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
     }

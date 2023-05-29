@@ -22,6 +22,7 @@ import fotofuncionarioRouter from './src/routes/fotos/fotofuncionarioroutes';
 import estoquecontroller from './src/routes/estoque/estoqueRoutes';
 import totalProCadastradoRouter from './src/routes/estoque/totalProdCadastradosrouter';
 import totalProdutoValorRouter from './src/routes/estoque/totalValorRoutes';
+import despachoRouter from './src/routes/estoque/despachoRoutes';
 
 const whiteList = ['https://magenta-custard-5b07fc.netlify.app', 'http://localhost:3000'];
 
@@ -37,7 +38,7 @@ const corsOptions = {
 
 // Função de middleware para adicionar um delay
 function delayMiddleware(_req: any, _res: any, next: Function) {
-  const delay = 100; // Delay de 1 segundo
+  const delay = 50; // Delay de 1 segundo
   setTimeout(next, delay);
 }
 
@@ -76,6 +77,7 @@ export class App {
     this.app.use('/empresa/filha/estoque', estoquecontroller);
     this.app.use('/empresa/filha/totalprodcadstradaos', totalProCadastradoRouter);
     this.app.use('/empresa/filha/totalvalor', totalProdutoValorRouter);
+    this.app.use('/empresa/filha/despacho', despachoRouter);
   }
 }
 
