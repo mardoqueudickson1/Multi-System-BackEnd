@@ -6,13 +6,13 @@ exports.up = function (knex: Knex) {
     RETURNS TRIGGER AS $$
     BEGIN
       IF TG_OP = 'INSERT' THEN
-        UPDATE produtos
-        SET quantidade_estoque = quantidade_estoque + NEW.quantidade
-        WHERE id = NEW.produto_id;
+        UPDATE estoque
+        SET quantidade = quantidade + NEW.quantidade
+        WHERE id = NEW.estoque_id;
       ELSIF TG_OP = 'DELETE' THEN
-        UPDATE produtos
-        SET quantidade_estoque = quantidade_estoque - OLD.quantidade
-        WHERE id = OLD.produto_id;
+        UPDATE estoque
+        SET quantidade = quantidade - OLD.quantidade
+        WHERE id = OLD.estoque_id;
       END IF;
 
       RETURN NEW;
