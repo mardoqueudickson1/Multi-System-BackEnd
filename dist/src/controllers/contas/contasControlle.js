@@ -51,7 +51,7 @@ class ContasController {
                     descricao,
                     tipo,
                     saldo: saldo,
-                    empresa_filha_id
+                    empresa_filha_id,
                 });
                 const novo = yield (0, database_1.default)('contas').where(id);
                 res.status(201).json(novo);
@@ -71,7 +71,7 @@ class ContasController {
                     res.status(404).json({ message: 'Empresa not found' });
                     return;
                 }
-                res.status(204).send("APAGADO COM SUCESSO");
+                res.status(204).send('APAGADO COM SUCESSO');
             }
             catch (error) {
                 res.status(500).json({ message: 'Erro do servidor' });

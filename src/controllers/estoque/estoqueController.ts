@@ -41,6 +41,18 @@ export class EstoqueController {
   //Faz cadastro no estoque
   public async create(req: Request, res: Response): Promise<void> {
     try {
+      const aleatorio = Math.floor(Math.random() * (10 + 20) + 10);
+      const aleatorio2 = Math.floor(Math.random() * (0 + 9) + 0);
+      const aleatorio4 = Math.floor(Math.random() * (0 + 9) + 0);
+      const pre = 'TSE';
+
+      const data = new Date();
+      const ano = data.getFullYear();
+      const segundos = data.getSeconds();
+      let numero = [ano, aleatorio, segundos].join('');
+
+      if (numero.length < 10) numero = [pre, ano, aleatorio, aleatorio2, aleatorio4, segundos].join('');
+
       const { nome, descricao, categoria, valor, quantidade, fornecedor } = req.body;
 
       const [Fornecedor] = await db('fornecedor').insert(fornecedor).returning('id');
@@ -48,6 +60,7 @@ export class EstoqueController {
       const [id] = await db('estoque')
         .insert({
           fornecedor_id: Fornecedor.id,
+          n_transacao: numero,
           nome,
           categoria,
           descricao,

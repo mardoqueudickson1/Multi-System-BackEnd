@@ -26,7 +26,7 @@ class TokenController {
             // Verifica se os dados foram passados corretamente
             if (!email || !password || !entity) {
                 return res.status(401).json({
-                    errors: ['Credenciais inválidas']
+                    errors: ['Credenciais inválidas'],
                 });
             }
             let table; // Variável para armazenar o nome da tabela da entidade a ser autenticada
@@ -40,7 +40,7 @@ class TokenController {
                     break;
                 default:
                     return res.status(401).json({
-                        errors: ['Tipo de entidade inválido']
+                        errors: ['Tipo de entidade inválido'],
                     });
             }
             // Faz uma consulta no banco de dados buscando um usuário com o email informado na tabela correspondente à entidade
@@ -48,13 +48,13 @@ class TokenController {
             // Verifica se o usuário existe e se a senha informada está correta
             if (!user) {
                 return res.status(401).json({
-                    errors: ['Credenciais inválidas na db']
+                    errors: ['Credenciais inválidas na db'],
                 });
             }
             const senhaCorreta = yield bcryptjs_1.default.compare(password, user.password_hash);
             if (!senhaCorreta) {
                 return res.status(401).json({
-                    errors: ['Credenciais inválidas na db']
+                    errors: ['Credenciais inválidas na db'],
                 });
             }
             // Define os dados que serão armazenados no token
@@ -75,10 +75,10 @@ class TokenController {
                 linguas_falada: user.linguas_falada,
                 ativo: user.ativo,
                 endereco: user.endereco,
-                entity
+                entity,
             };
-            const secret = "123455";
-            // Define o tempo de expiração do token (1 hora)
+            const secret = '123455';
+            // #TODO TIRAR ISSO
             const expiresIn = 3600;
             // Gera o token com os dados definidos anteriormente e a chave secreta armazenada nas variáveis de ambiente
             const token = jsonwebtoken_1.default.sign(data, secret, { expiresIn });
@@ -102,8 +102,8 @@ class TokenController {
                     linguas_falada: user.linguas_falada,
                     ativo: user.ativo,
                     endereco: user.endereco,
-                    entity
-                }
+                    entity,
+                },
             });
         });
     }

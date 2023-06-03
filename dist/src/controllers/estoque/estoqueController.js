@@ -20,8 +20,11 @@ class EstoqueController {
         return __awaiter(this, void 0, void 0, function* () {
             const id = Number(req.params.id);
             try {
-                const departamento = yield (0, database_1.default)('estoque').where({ id });
-                res.json(departamento);
+                const stock = yield (0, database_1.default)('estoque')
+                    .select('estoque.*', 'fornecedor.nome as nome_fornecedor', 'fornecedor.telefone', 'fornecedor.endereco')
+                    .join('fornecedor', 'estoque.fornecedor_id', 'fornecedor.id')
+                    .where('estoque.id', id);
+                res.json(stock);
             }
             catch (error) {
                 res.status(500).json({ message: 'Erro do servidor' });
@@ -32,21 +35,43 @@ class EstoqueController {
     //Mostra a estoque
     index(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const esoque = yield (0, database_1.default)('estoque').select('*');
-                res.status(201).json(esoque);
+            const result = yield database_1.default.raw(`
+      SELECT *, to_char(estoque.updated_at, 'DD-MM-YYYY') as data_formatada 
+      FROM estoque
+      ORDER BY estoque.updated_at DESC
+    `);
+            if (result.rows.valor) {
+                console.log(result.rows.valor);
             }
-            catch (error) {
-                console.log(error);
-                res.status(500).json({ message: 'Erro do servidor ao pesquisar' });
-            }
+            const dados = result.rows.map((row) => (Object.assign(Object.assign({}, row), { data_formatada: row.data_formatada.toString() })));
+            res.status(201).json(dados);
         });
     }
     //Faz cadastro no estoque
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const [id] = yield (0, database_1.default)('estoque').insert(req.body).returning('id');
+                const aleatorio = Math.floor(Math.random() * (10 + 20) + 10);
+                const aleatorio2 = Math.floor(Math.random() * (0 + 9) + 0);
+                const data = new Date();
+                const ano = data.getFullYear();
+                const segundos = data.getSeconds();
+                let numero = [ano, aleatorio, segundos].join('');
+                if (numero.length < 10)
+                    numero = [ano, aleatorio, aleatorio2, segundos].join('');
+                const { nome, descricao, categoria, valor, quantidade, fornecedor } = req.body;
+                const [Fornecedor] = yield (0, database_1.default)('fornecedor').insert(fornecedor).returning('id');
+                const [id] = yield (0, database_1.default)('estoque')
+                    .insert({
+                    fornecedor_id: Fornecedor.id,
+                    n_transacao: numero,
+                    nome,
+                    categoria,
+                    descricao,
+                    valor,
+                    quantidade,
+                })
+                    .returning('id');
                 const novo = yield (0, database_1.default)('estoque').where({ id: id.id });
                 res.status(201).json(novo);
             }

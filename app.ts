@@ -23,6 +23,8 @@ import estoquecontroller from './src/routes/estoque/estoqueRoutes';
 import totalProCadastradoRouter from './src/routes/estoque/totalProdCadastradosrouter';
 import totalProdutoValorRouter from './src/routes/estoque/totalValorRoutes';
 import despachoRouter from './src/routes/estoque/despachoRoutes';
+import fornecedores from './src/routes/fornecedores/fornecedorRoutes';
+import pessoaReceber from './src/routes/fornecedores/PessoaReceberRoutes';
 
 const whiteList = ['https://magenta-custard-5b07fc.netlify.app', 'http://localhost:3000'];
 
@@ -78,6 +80,8 @@ export class App {
     this.app.use('/empresa/filha/totalprodcadstradaos', totalProCadastradoRouter);
     this.app.use('/empresa/filha/totalvalor', totalProdutoValorRouter);
     this.app.use('/empresa/filha/despacho', despachoRouter);
+    this.app.use('/empresa/filha/fornecedores', fornecedores);
+    this.app.use('/empresa/filha/pessoareceber', pessoaReceber);
   }
 }
 

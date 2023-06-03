@@ -13,31 +13,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransacoesController = void 0;
+const knex_1 = __importDefault(require("knex"));
 const database_1 = __importDefault(require("../../config/database"));
 // import { parseISO } from 'date-fns';
 class TransacoesController {
     show(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const dados = yield database_1.default.raw(`
-      SELECT *, strftime('%d-%m-%Y', updated_at) as data_formatada 
+            const result = yield database_1.default.raw(`
+      SELECT *, to_char(transacoes.updated_at, 'DD-MM-YYYY') as data_formatada 
       FROM transacoes
+      ORDER BY transacoes.updated_at DESC
     `);
-            // adiciona uma coluna "data_formatada" com a data formatada
-            const dadosFormatados = dados.map((dado) => (Object.assign(Object.assign({}, dado), { data_formatada: dado.data_formatada.toString() // converte a data para string
-             })));
-            res.status(201).json(dadosFormatados);
+            const dados = result.rows.map((row) => (Object.assign(Object.assign({}, row), { data_formatada: row.data_formatada.toString() })));
+            res.status(201).json(dados);
         });
     }
     // Listagem de transações
-    index(request, response) {
+    index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { empresa_id } = request.query;
+            const id = Number(req.params.id);
             const transacoes = yield (0, database_1.default)('transacoes')
-                .join('empresas', 'transacoes.id_empresa_filha', '=', 'empresas.id')
-                .where('transacoes.id_empresa_filha', String(empresa_id))
-                .select('transacoes.*', 'empresas.nome as nome_empresa', database_1.default.raw("DATE_FORMAT(transacoes.updated_at, '%d-%m-%Y') as data_formatada"))
-                .orderBy('transacoes.id', 'desc');
-            return response.json(transacoes);
+                .select('transacoes.*', (0, knex_1.default)("to_char(transacoes.updated_at, 'DD-MM-YYYY') as data_formatada"))
+                .where({ id });
+            return res.json(transacoes);
         });
     }
     // Criação de transações
@@ -131,7 +129,7 @@ class TransacoesController {
                     res.status(404).json({ message: 'Transação not found' });
                     return;
                 }
-                res.status(204).send("APAGADO COM SUCESSO");
+                res.status(204).send('APAGADO COM SUCESSO');
             }
             catch (error) {
                 res.status(500).json({ message: 'Erro do servidor' });

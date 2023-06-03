@@ -14,8 +14,6 @@ function up(knex) {
     return __awaiter(this, void 0, void 0, function* () {
         yield knex.schema.createTable('empresa_filha', (table) => {
             table.increments('id').primary();
-            table.integer('empresa_pai_id').unsigned().notNullable();
-            table.foreign('empresa_pai_id').references('empresa_pai.id');
             table.string('nome', 255).notNullable();
             table.string('email', 255).notNullable().unique();
             table.string('nif', 50).notNullable().unique();

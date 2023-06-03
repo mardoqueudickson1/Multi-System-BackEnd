@@ -1,25 +1,29 @@
+/* eslint-disable no-constant-condition */
 import { Request, Response } from 'express';
-import { v4 as uuidv4 } from 'uuid';
 import db from '../../config/database';
 
 class DespachoController {
   //GERA numeros alatorio
-  gerarLetrasMaiusculas(): string {
-    const uuid = uuidv4();
-    const letrasMaiusculas = uuid
-      .replace(/[^A-Z]/g, '')
-      .toUpperCase()
-      .slice(0, 10);
-    return letrasMaiusculas;
-  }
 
   //CRIA A TRANSAÇÂO
   async create(req: Request, res: Response) {
     try {
-      const { produto_id, quantidade, data_saida, responsavel_despacho, pessoa_receber } = req.body;
+      const { produto_id, quantidade, data_saida, responsavel_despacho, pessoa_receber, lista_produtos } = req.body;
+
+      const aleatorio = Math.floor(Math.random() * (10 + 20) + 10);
+      const aleatorio2 = Math.floor(Math.random() * (0 + 9) + 0);
+      const aleatorio4 = Math.floor(Math.random() * (0 + 9) + 0);
+      const pre = 'TSS';
+
+      const data = new Date();
+      const ano = data.getFullYear();
+      const segundos = data.getSeconds();
+      let numero = [ano, aleatorio, segundos].join('');
+
+      if (numero.length < 10) numero = [pre, ano, aleatorio, aleatorio2, aleatorio4, segundos].join('');
 
       //Cadastra o nome da pessoa a receber primeiro
-      const [pessoa_receber_id] = await db('pessoa_receber').insert(pessoa_receber).returning('id');
+      const [id] = await db('pessoa_receber').insert(pessoa_receber).returning('id');
 
       // Verificar se o produto existe no estoque
       const product = await db('estoque').where({ id: produto_id }).first();
@@ -28,14 +32,11 @@ class DespachoController {
         return;
       }
 
-      // Gere o número de transação aleatório
-      const n_aleatorio = this.gerarLetrasMaiusculas();
-
+      // Adicione o número de transação aos dados da transação.
       if (product.quantidade < quantidade) {
         return res.status(400).json({ error: 'Quantidade insuficiente em estoque' });
       }
-      const valor_total = product.valor * product.quantidade;
-      console.log(valor_total);
+      const valor_total = product.valor * quantidade;
 
       // Iniciar uma transação para garantir consistência dos dados
       const trx = await db.transaction();
@@ -44,12 +45,12 @@ class DespachoController {
         const [saida] = await trx('saidas_produtos')
           .insert({
             estoque_id: produto_id,
-            registro_n: n_aleatorio,
-            pessoa_receber_id: pessoa_receber_id,
+            lista_produtos: lista_produtos,
+            registro_n: numero,
+            pessoa_receber: id.id,
             quantidade: -quantidade,
             data_saida: data_saida,
             responsavel_despacho: responsavel_despacho,
-            pessoa_receber: pessoa_receber,
             valor_total: valor_total,
           })
           .returning('*');
@@ -97,7 +98,8 @@ class DespachoController {
     try {
       const products = await db('saidas_produtos')
         .join('estoque', 'saidas_produtos.estoque_id', 'estoque.id')
-        .select('saidas_produtos.*', 'estoque.nome AS nome_estoque')
+        .join('pessoa_receber', 'saidas_produtos.pessoa_receber', 'pessoa_receber.id')
+        .select('saidas_produtos.*', 'estoque.nome AS nome_estoque', 'pessoa_receber.nome as pessoa_receber')
         .orderBy('saidas_produtos.id', 'desc');
 
       return res.status(200).json(products);
