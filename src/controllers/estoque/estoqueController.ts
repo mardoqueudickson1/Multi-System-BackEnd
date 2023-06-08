@@ -26,16 +26,21 @@ export class EstoqueController {
       ORDER BY estoque.updated_at DESC
     `);
 
-    if (result.rows.valor) {
-      console.log(result.rows.valor);
-    }
+    // Formatação de valor na moeda nacional(KZ)
+    const formattedValue = new Intl.NumberFormat('pt-AO', {
+      style: 'currency',
+      currency: 'AOA',
+      minimumFractionDigits: 2,
+    }).format(Number(result.valor));
 
     const dados = result.rows.map((row: any) => ({
       ...row,
       data_formatada: row.data_formatada.toString(),
+      valor_total: row.valor * row.quantidade,
+      valor_formatada: formattedValue,
     }));
 
-    res.status(201).json(dados);
+    res.status(200).json(dados);
   }
 
   //Faz cadastro no estoque
