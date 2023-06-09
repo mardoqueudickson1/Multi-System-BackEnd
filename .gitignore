@@ -2,5 +2,5 @@
 .gitignore
 node_modules
 package-lock
-yarn-error-log
+yarn-error.log
 postgres-data/
