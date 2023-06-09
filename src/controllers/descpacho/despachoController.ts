@@ -80,11 +80,9 @@ class DespachoController {
 
       // Verificar se o produto existe no estoque
       const product = await db('saidas_produtos')
-        .join('estoque', 'saidas_produtos.estoque_id', 'estoque.id')
         .join('pessoa_receber', 'saidas_produtos.pessoa_receber', 'pessoa_receber.id')
         .select(
           'saidas_produtos.*',
-          'estoque.nome AS nome_estoque',
           'pessoa_receber.nome as pessoa_receber',
           'pessoa_receber.telefone as pessoa_receber_telefone',
           'pessoa_receber.email as pessoa_receber_email',
