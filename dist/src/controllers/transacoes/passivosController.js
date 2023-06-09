@@ -35,5 +35,5 @@ exports.default = {
             const passivo = saldoAtivos;
             return res.json({ passivo });
         });
-    }
+    },
 };

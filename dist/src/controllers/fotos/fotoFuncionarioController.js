@@ -23,7 +23,7 @@ class FotoFuncionarioController {
                 if (error) {
                     if (error.code === 'LIMIT_FILE_SIZE') {
                         return res.status(400).json({
-                            errors: ["Arquivo precisa ser PNG ou JPG"],
+                            errors: ['Arquivo precisa ser PNG ou JPG'],
                         });
                     }
                 }
@@ -32,7 +32,7 @@ class FotoFuncionarioController {
                     const { funcinario_id } = req.body;
                     yield (0, database_1.default)('foto_funcionario').insert({ originalname, filename, funcinario_id });
                     return res.json({
-                        success: ["Foto enviada com sucesso"]
+                        success: ['Foto enviada com sucesso'],
                     });
                 }
                 catch (e) {

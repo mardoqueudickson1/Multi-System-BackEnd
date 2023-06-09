@@ -40,11 +40,14 @@ class EstoqueController {
       FROM estoque
       ORDER BY estoque.updated_at DESC
     `);
-            if (result.rows.valor) {
-                console.log(result.rows.valor);
-            }
-            const dados = result.rows.map((row) => (Object.assign(Object.assign({}, row), { data_formatada: row.data_formatada.toString() })));
-            res.status(201).json(dados);
+            // Formatação de valor na moeda nacional(KZ)
+            const formattedValue = new Intl.NumberFormat('pt-AO', {
+                style: 'currency',
+                currency: 'AOA',
+                minimumFractionDigits: 2,
+            }).format(Number(result.valor));
+            const dados = result.rows.map((row) => (Object.assign(Object.assign({}, row), { data_formatada: row.data_formatada.toString(), valor_total: row.valor * row.quantidade, valor_formatada: formattedValue })));
+            res.status(200).json(dados);
         });
     }
     //Faz cadastro no estoque
@@ -53,12 +56,14 @@ class EstoqueController {
             try {
                 const aleatorio = Math.floor(Math.random() * (10 + 20) + 10);
                 const aleatorio2 = Math.floor(Math.random() * (0 + 9) + 0);
+                const aleatorio4 = Math.floor(Math.random() * (0 + 9) + 0);
+                const pre = 'TSE';
                 const data = new Date();
                 const ano = data.getFullYear();
                 const segundos = data.getSeconds();
                 let numero = [ano, aleatorio, segundos].join('');
                 if (numero.length < 10)
-                    numero = [ano, aleatorio, aleatorio2, segundos].join('');
+                    numero = [pre, ano, aleatorio, aleatorio2, aleatorio4, segundos].join('');
                 const { nome, descricao, categoria, valor, quantidade, fornecedor } = req.body;
                 const [Fornecedor] = yield (0, database_1.default)('fornecedor').insert(fornecedor).returning('id');
                 const [id] = yield (0, database_1.default)('estoque')

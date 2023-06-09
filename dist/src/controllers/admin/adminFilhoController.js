@@ -42,12 +42,12 @@ class AdminFilhoController {
     //Cria a admin da empresa filha
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const password = "12345";
+            const password = '12345';
             const senha = (0, hashPassWord_1.generateHash)(password);
             //Gera número aleatório para cada funcionário com prefixo do ano atual
             const aleatorio = Math.floor(Math.random() * (10 + 20) + 10);
             const aleatorio2 = Math.floor(Math.random() * (0 + 9) + 0);
-            const data = new Date;
+            const data = new Date();
             const ano = data.getFullYear();
             const segundos = data.getSeconds();
             let numero = [ano, aleatorio, segundos].join('');
