@@ -8,6 +8,9 @@ export async function up(knex: Knex): Promise<void> {
     table.string('nome', 255).notNullable();
     table.string('descricao', 255).notNullable();
     table.string('categoria').notNullable();
+    table.string('marca', 255).notNullable();
+    table.enum('estado', ['bom', 'normal', 'mau', 'em_uso', 'novo']).notNullable();
+    table.string('cor', 255).notNullable();
     table.decimal('valor').notNullable();
     table.integer('quantidade').notNullable();
     table.timestamps(true, true);
