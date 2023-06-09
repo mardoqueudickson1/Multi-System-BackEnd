@@ -7,10 +7,9 @@ class DespachoController {
 
   //CRIA A TRANSAÇÂO
   async create(req: Request, res: Response) {
+    const { data_saida, responsavel_despacho, lista_produtos } = req.body;
+    const { nome, telefone, email, endereco } = req.body.pessoa_receber;
     try {
-      const { data_saida, responsavel_despacho, lista_produtos } = req.body;
-      const { nome, telefone, email, endereco } = req.body.pessoa_receber;
-
       const aleatorio = Math.floor(Math.random() * (10 + 20) + 10);
       const aleatorio2 = Math.floor(Math.random() * (0 + 9) + 0);
       const aleatorio4 = Math.floor(Math.random() * (0 + 9) + 0);
@@ -28,9 +27,9 @@ class DespachoController {
       const trx = await db.transaction();
 
       try {
+        let valorTotal = 0;
         for (const produto of lista_produtos) {
           // Verificar se o produto existe no estoque
-          console.log(produto);
           const { id, quantity } = produto;
           const product = await trx('estoque').where({ id: id }).first();
 
@@ -44,21 +43,24 @@ class DespachoController {
             return res.status(400).json({ error: 'Quantidade insuficiente em estoque' });
           }
 
-          const valor_total = product.valor * quantity;
+          const valorProduto = product.valor * quantity; // Valor do produto atual
 
-          // Inserir a saída do produto na tabela "saidas_produtos"
-          await trx('saidas_produtos').insert({
-            registro_n: numero,
-            pessoa_receber: pessoa_receber.id,
-            quantidade: -quantity,
-            data_saida: data_saida,
-            responsavel_despacho: responsavel_despacho,
-            valor_total: valor_total,
-          });
+          valorTotal += valorProduto;
 
           // Atualizar a quantidade disponível do produto no estoque
           await trx('estoque').where({ id: id }).decrement('quantidade', quantity);
         }
+
+        // Inserir a saída do produto na tabela "saidas_produtos"
+        await trx('saidas_produtos').insert({
+          registro_n: numero,
+          pessoa_receber: pessoa_receber.id,
+          quantidade: lista_produtos.length,
+          data_saida: data_saida,
+          responsavel_despacho: responsavel_despacho,
+          valor_total: valorTotal,
+          lista_produtos: JSON.stringify(lista_produtos),
+        });
 
         // Confirmar a transação
         await trx.commit();
@@ -69,7 +71,7 @@ class DespachoController {
         throw error;
       }
     } catch (error) {
-      console.error(error);
+      console.log('AAAAAAAAAAAAA:', lista_produtos.length, lista_produtos);
       return res.status(500).json({ error: 'Ocorreu um erro ao registrar a saída dos produtos' });
     }
   }
@@ -80,11 +82,9 @@ class DespachoController {
 
       // Verificar se o produto existe no estoque
       const product = await db('saidas_produtos')
-        .join('estoque', 'saidas_produtos.estoque_id', 'estoque.id')
         .join('pessoa_receber', 'saidas_produtos.pessoa_receber', 'pessoa_receber.id')
         .select(
           'saidas_produtos.*',
-          'estoque.nome AS nome_estoque',
           'pessoa_receber.nome as pessoa_receber',
           'pessoa_receber.telefone as pessoa_receber_telefone',
           'pessoa_receber.email as pessoa_receber_email',
