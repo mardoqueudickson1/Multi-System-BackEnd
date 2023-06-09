@@ -9,6 +9,4 @@ router.get('/', transactionController.show);
 router.get('/:id', transactionController.index);
 router.delete('/:id', transactionController.delete);
 
-
-
 export default router;

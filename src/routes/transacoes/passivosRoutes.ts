@@ -1,8 +1,8 @@
-import Router  from 'express'
-import passivosController from '../../controllers/transacoes/passivosController'
+import Router from 'express';
+import passivosController from '../../controllers/transacoes/passivosController';
 
-const router = Router()
+const router = Router();
 
-router.get('/', passivosController.ativos)
+router.get('/', passivosController.ativos);
 
-export default router
+export default router;

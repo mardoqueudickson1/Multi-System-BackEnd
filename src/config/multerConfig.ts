@@ -1,15 +1,13 @@
 import { extname, resolve } from 'path';
 import multer, { FileFilterCallback } from 'multer';
 
-
 const aleatorio = (): number => Math.floor(Math.random() * 10000 + 10000);
-
 
 export default {
   // A propriedade fileFilter define uma função que é usada para filtrar os arquivos que serão processados pelo multer.
   fileFilter: (_req: any, file: any, cb: FileFilterCallback) => {
     if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
-    const Error = new multer.MulterError('LIMIT_FILE_SIZE');
+      const Error = new multer.MulterError('LIMIT_FILE_SIZE');
       return cb(Error);
     }
 

@@ -28,10 +28,9 @@ export class DepartamentoController {
 
   //Cria o departamento
   public async create(req: Request, res: Response): Promise<void> {
-    
     try {
-      const [ id ] =  await db<Departamento>('departamento').insert(req.body).returning('id');
-  
+      const [id] = await db<Departamento>('departamento').insert(req.body).returning('id');
+
       const novo = await db<Departamento>('departamento').where({ id: id.id });
 
       res.status(201).json(novo);
