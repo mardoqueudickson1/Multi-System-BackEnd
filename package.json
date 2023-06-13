@@ -42,7 +42,7 @@
     "eslint-prettier": "^0.0.0-empty",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
-    "ts-node-dev": "^2.0.0",
+    "ts-node-dev": "^2.0.0"
    
   }
 }
