@@ -7,6 +7,6 @@ router.get('/', EstoqueController.index);
 router.get('/:id', EstoqueController.show);
 router.post('/', EstoqueController.create);
 router.put('/:id', EstoqueController.update);
-router.delete('/:id', EstoqueController.destroy);
+router.delete('/:id', EstoqueController.delete);
 
 export default router;

@@ -93,7 +93,7 @@ export class FuncionarioController {
     try {
       const rowsUpdated = await db<Funcionario>('funcionario').where({ id }).update(req.body);
       if (rowsUpdated === 0) {
-        res.status(404).json({ message: 'Empresa not found' });
+        res.status(404).json({ message: 'funcionario not found' });
         return;
       }
       const empresa = await db<Funcionario>('funcionario').where({ id }).first();

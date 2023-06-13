@@ -86,27 +86,27 @@ export class EstoqueController {
     const id = Number(req.params.id);
 
     try {
-      const rowsUpdated = await db<Estoque>('estoque').where(id).update(req.body);
+      const rowsUpdated = await db<Estoque>('estoque').where({ id }).update(req.body);
       if (rowsUpdated === 0) {
-        res.status(404).json({ message: 'esoque not found' });
+        res.status(404).json({ message: 'estoque not found' });
         return;
       }
-      const esoque = await db<Estoque>('estoque').where(id).first();
-      res.json(esoque);
+      const empresa = await db<Estoque>('estoque').where({ id }).first();
+      res.json(empresa);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
     }
   }
 
-  public async destroy(req: Request, res: Response): Promise<void> {
+  public async delete(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
     try {
-      const rowsDeleted = await db<Estoque>('estoque').where(id).delete();
+      const rowsDeleted = await db<Estoque>('estoque').where({ id: id }).delete();
       if (rowsDeleted === 0) {
         res.status(404).json({ message: 'estoque not found' });
         return;
       }
-      res.status(204).send();
+      res.status(200).send();
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor' });
     }
