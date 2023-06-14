@@ -1,6 +1,6 @@
-import { Knex } from 'knex';
+const { Knex } = require('knex');
 
-exports.up = function (knex: Knex) {
+exports.up = function (knex) {
   return knex.schema.createTable('compras', function (table) {
     table.increments('id').primary();
     table.integer('fornecedor_id').unsigned().references('id').inTable('fornecedor');
@@ -11,6 +11,6 @@ exports.up = function (knex: Knex) {
   });
 };
 
-exports.down = function (knex: Knex) {
+exports.down = function (knex) {
   return knex.schema.dropTable('compras');
 };

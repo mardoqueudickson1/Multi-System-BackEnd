@@ -1,6 +1,6 @@
-import { Knex } from 'knex';
+const { Knex } = require('knex');
 
-exports.up = function (knex: Knex) {
+exports.up = function (knex) {
   return knex.schema.createTable('saidas_produtos', function (table) {
     table.increments('id').primary();
     table.integer('pessoa_receber').unsigned().references('id').inTable('pessoa_receber');
@@ -14,6 +14,6 @@ exports.up = function (knex: Knex) {
   });
 };
 
-exports.down = function (knex: Knex) {
+exports.down = function (knex) {
   return knex.schema.dropTable('saidas_produtos');
 };

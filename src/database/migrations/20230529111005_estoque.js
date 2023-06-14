@@ -1,7 +1,7 @@
-import { Knex } from 'knex';
+const { Knex } = require('knex');
 
-export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('estoque', (table) => {
+exports.up = async function (knex) {
+  await knex.schema.createTable('estoque', function (table) {
     table.increments('id').primary();
     table.integer('fornecedor_id').unsigned().references('id').inTable('fornecedor');
     table.string('n_transacao').notNullable();
@@ -15,9 +15,8 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('quantidade').notNullable();
     table.timestamps(true, true);
   });
-}
+};
 
-export async function down(knex: Knex): Promise<void> {
-  return knex.schema.dropTable('estoque');
-}
-//A
+exports.down = async function (knex) {
+  await knex.schema.dropTable('estoque');
+};

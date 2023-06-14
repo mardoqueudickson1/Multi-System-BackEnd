@@ -1,6 +1,6 @@
-import { Knex } from 'knex';
+const Knex = require('knex');
 
-export async function up(knex: Knex): Promise<void> {
+async function up(knex) {
   return knex.schema.createTable('contas', (table) => {
     table.increments('id').primary();
     table.string('descricao').notNullable();
@@ -11,6 +11,11 @@ export async function up(knex: Knex): Promise<void> {
   });
 }
 
-export async function down(knex: Knex): Promise<void> {
+async function down(knex) {
   return knex.schema.dropTable('contas');
 }
+
+module.exports = {
+  up,
+  down,
+};
