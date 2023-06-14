@@ -64,7 +64,7 @@ class EstoqueController {
                 let numero = [ano, aleatorio, segundos].join('');
                 if (numero.length < 10)
                     numero = [pre, ano, aleatorio, aleatorio2, aleatorio4, segundos].join('');
-                const { nome, descricao, categoria, valor, quantidade, fornecedor } = req.body;
+                const { nome, descricao, categoria, valor, quantidade, fornecedor, cor, marca, estado } = req.body;
                 const [Fornecedor] = yield (0, database_1.default)('fornecedor').insert(fornecedor).returning('id');
                 const [id] = yield (0, database_1.default)('estoque')
                     .insert({
@@ -75,6 +75,9 @@ class EstoqueController {
                     descricao,
                     valor,
                     quantidade,
+                    cor,
+                    marca,
+                    estado,
                 })
                     .returning('id');
                 const novo = yield (0, database_1.default)('estoque').where({ id: id.id });

@@ -8,9 +8,9 @@ exports.up = async function (knex) {
     table.string('nome', 255).notNullable();
     table.string('descricao', 255).notNullable();
     table.string('categoria').notNullable();
-    table.string('marca', 255).notNullable();
-    table.enum('estado', ['bom', 'normal', 'mau', 'em_uso', 'novo']).notNullable();
-    table.string('cor', 255).notNullable();
+    table.string('marca', 255);
+    table.enum('estado', ['bom', 'normal', 'mau', 'em_uso', 'novo']);
+    table.string('cor', 255);
     table.decimal('valor').notNullable();
     table.integer('quantidade').notNullable();
     table.timestamps(true, true);

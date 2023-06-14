@@ -58,7 +58,7 @@ export class EstoqueController {
 
       if (numero.length < 10) numero = [pre, ano, aleatorio, aleatorio2, aleatorio4, segundos].join('');
 
-      const { nome, descricao, categoria, valor, quantidade, fornecedor } = req.body;
+      const { nome, descricao, categoria, valor, quantidade, fornecedor, cor, marca, estado } = req.body;
 
       const [Fornecedor] = await db('fornecedor').insert(fornecedor).returning('id');
 
@@ -71,6 +71,9 @@ export class EstoqueController {
           descricao,
           valor,
           quantidade,
+          cor,
+          marca,
+          estado,
         })
         .returning('id');
       const novo = await db<Estoque>('estoque').where({ id: id.id });
