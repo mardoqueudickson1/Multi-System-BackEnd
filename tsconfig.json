@@ -108,5 +108,11 @@
   },
 
   "include": ["src/**/*", "server.ts", "app.ts"],
-  "exclude": ["node_modules", "knexfile.ts"]
+  "exclude": [
+    "node_modules",
+   "knexfile.ts",
+   "src/database",
+   "scr/config"
+  
+  ]
 }

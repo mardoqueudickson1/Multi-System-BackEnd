@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-var-requires */
 const Knex = require('knex');
 const path = require('path');
 const dotenv = require('dotenv');
