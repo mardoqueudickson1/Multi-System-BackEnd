@@ -23,7 +23,7 @@
     "sqlite3": "^5.1.6"
   },
   "scripts": {
-    "start": "node build/server.js",
+    "start": "node build/server.js && yarn knex migrate:latest",
     "build": "tsc"
   },
   "devDependencies": {

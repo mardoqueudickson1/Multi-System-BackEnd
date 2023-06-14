@@ -13,3 +13,4 @@ app_1.default.listen(port, () => {
     console.log(`http://localhost:${port}`);
     console.log();
 });
+// "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' server.ts",
