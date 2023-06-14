@@ -10,5 +10,5 @@ router.get('/', estoqueController_1.default.index);
 router.get('/:id', estoqueController_1.default.show);
 router.post('/', estoqueController_1.default.create);
 router.put('/:id', estoqueController_1.default.update);
-router.delete('/:id', estoqueController_1.default.destroy);
+router.delete('/:id', estoqueController_1.default.delete);
 exports.default = router;

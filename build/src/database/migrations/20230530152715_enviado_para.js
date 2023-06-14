@@ -12,15 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
 function up(knex) {
     return __awaiter(this, void 0, void 0, function* () {
-        return knex.schema.createTable('estoque', (table) => {
+        return knex.schema.createTable('pessoa_receber', (table) => {
             table.increments('id').primary();
-            table.integer('fornecedor_id').unsigned().references('id').inTable('fornecedor');
-            table.integer('n_transacao').notNullable();
             table.string('nome', 255).notNullable();
-            table.string('descricao', 255).notNullable();
-            table.string('categoria').notNullable();
-            table.decimal('valor').notNullable();
-            table.integer('quantidade').notNullable();
+            table.string('telefone', 255).notNullable();
+            table.string('endereco', 255).notNullable();
+            table.string('email', 255).notNullable();
             table.timestamps(true, true);
         });
     });
@@ -28,7 +25,7 @@ function up(knex) {
 exports.up = up;
 function down(knex) {
     return __awaiter(this, void 0, void 0, function* () {
-        return knex.schema.dropTable('estoque');
+        return knex.schema.dropTable('pessoa_receber');
     });
 }
 exports.down = down;

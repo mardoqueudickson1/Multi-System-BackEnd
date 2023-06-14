@@ -22,7 +22,7 @@ class TodalProdutoEstoqueController {
                 const result = yield (0, database_1.default)('estoque').sum('valor as total').first();
                 const totalValue = result || 0;
                 if (totalValue) {
-                    // Formatação do valor como dinheiro com vírgulas e pontos
+                    // Formatação do valor como dinheiro, com vírgulas e pontos
                     const formattedValue = new Intl.NumberFormat('pt-AO', {
                         style: 'currency',
                         currency: 'AOA',

@@ -12,13 +12,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
 function up(knex) {
     return __awaiter(this, void 0, void 0, function* () {
-        return knex.schema.createTable('estoque', (table) => {
+        return knex.schema.createTable('funcionario', (table) => {
             table.increments('id').primary();
+            table.integer('departamento_id').unsigned().notNullable();
+            table.foreign('departamento_id').references('departamento.id');
+            table.integer('role_id').unsigned();
+            table.foreign('role_id').references('role.id');
+            table.integer('n_funcionario', 50).notNullable();
             table.string('nome', 255).notNullable();
-            table.string('descricao', 255).notNullable();
-            table.string('categoria').notNullable();
-            table.decimal('valor').notNullable();
-            table.integer('quantidade').notNullable();
+            table.string('sobrenome', 255).notNullable();
+            table.string('email', 255).notNullable().unique();
+            table.string('nif', 255).notNullable().unique();
+            table.string('telefone', 255).notNullable();
+            table.string('password_hash').notNullable();
+            table.date('data_de_nascimento');
+            table.date('data_de_contratacao');
+            table.integer('salario').notNullable();
+            table.string('educacao', 255);
+            table.string('bio');
+            table.string('linguas_falada', 255);
+            table.boolean('ativo').defaultTo(true);
+            table.string('endereco', 255).notNullable();
             table.timestamps(true, true);
         });
     });
@@ -26,7 +40,7 @@ function up(knex) {
 exports.up = up;
 function down(knex) {
     return __awaiter(this, void 0, void 0, function* () {
-        return knex.schema.dropTable('estoque');
+        return knex.schema.dropTable('funcionario');
     });
 }
 exports.down = down;

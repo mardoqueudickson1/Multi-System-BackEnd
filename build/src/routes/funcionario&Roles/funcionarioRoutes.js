@@ -8,6 +8,7 @@ const funcionarioController_1 = __importDefault(require("../../controllers/funci
 const router = (0, express_1.default)();
 router.post('/', funcionarioController_1.default.create);
 router.get('/:id', funcionarioController_1.default.show);
+router.put('/:id', funcionarioController_1.default.update);
 router.get('/', funcionarioController_1.default.index);
 router.delete('/:id', funcionarioController_1.default.delete);
 exports.default = router;

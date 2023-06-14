@@ -12,14 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
 function up(knex) {
     return __awaiter(this, void 0, void 0, function* () {
-        return knex.schema.createTable('empresa_pai', (table) => {
+        return knex.schema.createTable('estoque', (table) => {
             table.increments('id').primary();
+            table.integer('fornecedor_id').unsigned().references('id').inTable('fornecedor');
+            table.string('n_transacao').notNullable();
             table.string('nome', 255).notNullable();
-            table.string('email', 255).notNullable().unique();
-            table.string('nif', 50).notNullable().unique();
-            table.integer('telefone', 50).notNullable();
-            table.string('especialidade').notNullable();
-            table.string('endereco', 255).notNullable();
+            table.string('descricao', 255).notNullable();
+            table.string('categoria').notNullable();
+            table.string('marca', 255).notNullable();
+            table.enum('estado', ['bom', 'normal', 'mau', 'em_uso', 'novo']).notNullable();
+            table.string('cor', 255).notNullable();
+            table.decimal('valor').notNullable();
+            table.integer('quantidade').notNullable();
             table.timestamps(true, true);
         });
     });
@@ -27,7 +31,8 @@ function up(knex) {
 exports.up = up;
 function down(knex) {
     return __awaiter(this, void 0, void 0, function* () {
-        return knex.schema.dropTable('empresa_pai');
+        return knex.schema.dropTable('estoque');
     });
 }
 exports.down = down;
+//A
