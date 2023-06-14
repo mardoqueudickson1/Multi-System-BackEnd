@@ -23,8 +23,8 @@
     "sqlite3": "^5.1.6"
   },
   "scripts": {
-    "start": "node build/server.js ",
-    "build": "tsc"
+    "start": "node build/server.js",
+    "build": "tsc "
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.2",

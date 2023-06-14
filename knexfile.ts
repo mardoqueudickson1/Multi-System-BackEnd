@@ -1,12 +1,14 @@
-import { Knex } from 'knex';
-import path from 'path';
-import dotenv from 'dotenv';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-var-requires */
+const Knex = require('knex');
+const path = require('path');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
-const PORT_DB: number = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 0;
+const PORT_DB = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 0;
 
-const developmentConfig: Knex.Config = {
+const developmentConfig = {
   client: 'postgresql',
   connection: {
     host: 'localhost',
@@ -25,7 +27,7 @@ const developmentConfig: Knex.Config = {
   },
 };
 
-const productionConfig: Knex.Config = {
+const productionConfig = {
   client: 'postgresql',
   connection: process.env.DATABASE_URL,
 
@@ -38,6 +40,6 @@ const productionConfig: Knex.Config = {
   },
 };
 
-const config: Knex.Config = process.env.NODE_ENV === 'production' ? productionConfig : developmentConfig;
+const config = process.env.NODE_ENV === 'production' ? productionConfig : developmentConfig;
 
-export default config;
+module.exports = config;
