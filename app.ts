@@ -26,8 +26,7 @@ import despachoRouter from './src/routes/estoque/despachoRoutes';
 import fornecedores from './src/routes/fornecedores/fornecedorRoutes';
 import pessoaReceber from './src/routes/fornecedores/PessoaReceberRoutes';
 
-const whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app', 'http://localhost:3000'];
-
+const whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app'];
 
 const corsOptions = {
   origin: function (origin: any, callback: Function) {

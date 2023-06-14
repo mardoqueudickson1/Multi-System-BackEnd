@@ -29,7 +29,7 @@ const totalValorRoutes_1 = __importDefault(require("./src/routes/estoque/totalVa
 const despachoRoutes_1 = __importDefault(require("./src/routes/estoque/despachoRoutes"));
 const fornecedorRoutes_1 = __importDefault(require("./src/routes/fornecedores/fornecedorRoutes"));
 const PessoaReceberRoutes_1 = __importDefault(require("./src/routes/fornecedores/PessoaReceberRoutes"));
-const whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app/', 'http://localhost:3000'];
+const whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app'];
 const corsOptions = {
     origin: function (origin, callback) {
         if (whiteList.indexOf(origin) !== -1 || !origin) {
