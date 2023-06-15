@@ -1,14 +1,10 @@
-import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import db from '../../config/database';
+import { TokenPayload } from '../../interfaces/interfaces';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
-interface TokenPayload extends JwtPayload {
-  id: number;
-  email: string;
-}
 
 export default async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const { authorization } = req.headers;
@@ -28,7 +24,6 @@ export default async function authMiddleware(req: Request, res: Response, next: 
     const secretKey: Secret = process.env.TOKEN_SECRET || '';
     const decoded = jwt.verify(token, secretKey) as TokenPayload;
     const { id, email } = decoded;
-    console.log('AQUIIIIIIIIIIIIIIIIIIIIII');
 
     // Busca o usuário no banco de dados
     const user = await db('funcionario').where({ id: id, email: email }).first();

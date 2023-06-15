@@ -14,6 +14,8 @@ async function up(knex) {
     table.string('nif', 255).notNullable().unique();
     table.string('telefone', 255).notNullable();
     table.string('password_hash').notNullable();
+    table.string('reset_token');
+    table.timestamp('reset_token_expires');
     table.date('data_de_nascimento');
     table.date('data_de_contratacao');
     table.integer('salario').notNullable();

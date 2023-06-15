@@ -32,7 +32,6 @@ function authMiddleware(req, res, next) {
             const secretKey = process.env.TOKEN_SECRET || '';
             const decoded = jsonwebtoken_1.default.verify(token, secretKey);
             const { id, email } = decoded;
-            console.log('AQUIIIIIIIIIIIIIIIIIIIIII');
             // Busca o usuário no banco de dados
             const user = yield (0, database_1.default)('funcionario').where({ id: id, email: email }).first();
             // const userAdmin = await db('admin_filho').where({ id: id, email: email  }).first();

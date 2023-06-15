@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
-dotenv.config();
-// console.log(`TOKEN GERADO: ${process.env.TOKEN_SECRET}`);
-
 import bcrypt from 'bcryptjs';
 import db from '../../config/database';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 
 class TokenController {
   async store(req: Request, res: Response) {
@@ -42,7 +40,7 @@ class TokenController {
     // Verifica se o usuário existe e se a senha informada está correta
     if (!user) {
       return res.status(401).json({
-        errors: ['Credenciais inválidas na db'],
+        errors: ['Credenciais inválidas'],
       });
     }
 
@@ -50,7 +48,7 @@ class TokenController {
 
     if (!senhaCorreta) {
       return res.status(401).json({
-        errors: ['Credenciais inválidas na db'],
+        errors: ['Senha inválidas '],
       });
     }
 
@@ -92,6 +90,7 @@ class TokenController {
         role_id: user.role_id,
         departamento_id: user.departamento_id,
         nif: user.nif,
+        password_hash: user.password_hash,
         telefone: user.telefone,
         data_de_nascimento: user.data_de_nascimento,
         data_de_contratacao: user.data_de_contratacao,

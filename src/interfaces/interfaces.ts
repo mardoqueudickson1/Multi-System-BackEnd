@@ -1,3 +1,5 @@
+import { JwtPayload } from 'jsonwebtoken';
+
 export interface EmpresaPai {
   id: number;
   nome: string;
@@ -97,4 +99,9 @@ export interface Estoque {
   categoria: string;
   valor: number;
   quantidade: number;
+}
+
+export interface TokenPayload extends JwtPayload {
+  id: number;
+  email: string;
 }

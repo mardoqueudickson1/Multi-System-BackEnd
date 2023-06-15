@@ -25,8 +25,12 @@ import totalProdutoValorRouter from './src/routes/estoque/totalValorRoutes';
 import despachoRouter from './src/routes/estoque/despachoRoutes';
 import fornecedores from './src/routes/fornecedores/fornecedorRoutes';
 import pessoaReceber from './src/routes/fornecedores/PessoaReceberRoutes';
+import resetPassword from './src/routes/tokens/resetPasswordRoutes';
 
-const whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app'];
+//   whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app'];
+//   whiteList = ['http://localhost:3001'];
+
+const whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app', 'http://localhost:3000'];
 
 const corsOptions = {
   origin: function (origin: any, callback: Function) {
@@ -40,7 +44,7 @@ const corsOptions = {
 
 // Função de middleware para adicionar um delay
 function delayMiddleware(_req: any, _res: any, next: Function) {
-  const delay = 10; // Delay de 1 segundo
+  const delay = 50; // Delay de 1 segundo
   setTimeout(next, delay);
 }
 
@@ -82,6 +86,7 @@ export class App {
     this.app.use('/empresa/filha/despacho', despachoRouter);
     this.app.use('/empresa/filha/fornecedores', fornecedores);
     this.app.use('/empresa/filha/pessoareceber', pessoaReceber);
+    this.app.use('/empresa/filha/reset-password', resetPassword);
   }
 }
 
