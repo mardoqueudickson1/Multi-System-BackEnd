@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /home/queuscript/Documentos/PROJECTOS/Multi-System-BackEnd/.yarn/releases/yarn-1.22.19.cjs remove uuid
+  /usr/bin/node /home/queuscript/Documentos/PROJECTOS/Multi-System-BackEnd/.yarn/releases/yarn-1.22.19.cjs add --dev cross-env-shell
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
@@ -14,8 +14,17 @@ Platform:
   linux x64
 
 Trace: 
-  Error: getaddrinfo EAI_AGAIN registry.yarnpkg.com
-      at GetAddrInfoReqWrap.onlookup [as oncomplete] (node:dns:107:26)
+  Error: https://registry.yarnpkg.com/cross-env-shell: Not found
+      at params.callback [as _callback] (/home/queuscript/Documentos/PROJECTOS/Multi-System-BackEnd/.yarn/releases/yarn-1.22.19.cjs:77675:18)
+      at self.callback (/home/queuscript/Documentos/PROJECTOS/Multi-System-BackEnd/.yarn/releases/yarn-1.22.19.cjs:135297:22)
+      at Request.emit (node:events:513:28)
+      at Request.<anonymous> (/home/queuscript/Documentos/PROJECTOS/Multi-System-BackEnd/.yarn/releases/yarn-1.22.19.cjs:136269:10)
+      at Request.emit (node:events:513:28)
+      at IncomingMessage.<anonymous> (/home/queuscript/Documentos/PROJECTOS/Multi-System-BackEnd/.yarn/releases/yarn-1.22.19.cjs:136191:12)
+      at Object.onceWrapper (node:events:627:28)
+      at IncomingMessage.emit (node:events:525:35)
+      at endReadableNT (node:internal/streams/readable:1359:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
 
 npm manifest: 
   {
@@ -43,8 +52,8 @@ npm manifest:
       "sqlite3": "^5.1.6"
     },
     "scripts": {
-      "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' server.ts",
-      "build": "tsc"
+      "start": "node build/server.js",
+      "build": "tsc "
     },
     "devDependencies": {
       "@types/body-parser": "^1.19.2",
@@ -2764,9 +2773,9 @@ Lockfile:
     integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
   
   typescript@*:
-    version "5.0.4"
-    resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.0.4.tgz#b217fd20119bd61a94d4011274e0ab369058da3b"
-    integrity sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
+    version "5.1.3"
+    resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.1.3.tgz#8d84219244a6b40b6fb2b33cc1c062f715b9e826"
+    integrity sha512-XH627E9vkeqhlZFQuL+UsyAXEnibT0kWR2FWONlr4sTjvxyJYnyefgrkyECLzM5NenmKzRAy2rR/OlYLA1HkZw==
   
   undefsafe@^2.0.5:
     version "2.0.5"
@@ -2808,11 +2817,6 @@ Lockfile:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
     integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
-  
-  uuid@^9.0.0:
-    version "9.0.0"
-    resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
-    integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
   
   v8-compile-cache-lib@^3.0.1:
     version "3.0.1"
