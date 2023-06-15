@@ -42,7 +42,7 @@ const corsOptions = {
 };
 // Função de middleware para adicionar um delay
 function delayMiddleware(_req, _res, next) {
-    const delay = 50; // Delay de 1 segundo
+    const delay = 10; // Delay de 1 segundo
     setTimeout(next, delay);
 }
 // Classe da aplicação principal
