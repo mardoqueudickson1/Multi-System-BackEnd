@@ -86,10 +86,8 @@ export class App {
     this.app.use('/empresa/filha/despacho', despachoRouter);
     this.app.use('/empresa/filha/fornecedores', fornecedores);
     this.app.use('/empresa/filha/pessoareceber', pessoaReceber);
-    this.app.use('/empresa/filha/reset-password', resetPassword);
+    this.app.use('/empresa/filha/alterar-password', resetPassword);
   }
 }
 
 export default new App().app;
-
-// BBBBBBBBBBBbb
