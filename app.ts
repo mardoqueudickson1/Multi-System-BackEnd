@@ -35,22 +35,10 @@ import resetPassword from './src/routes/tokens/resetPasswordRoutes';
 //   whiteList = ['http://localhost:3001'];
 // }
 
-// const whiteList = ['https://magenta-chaja-b4c1b3.netlify.app'];
-
-// const corsOptions = {
-//   origin: function (origin: any, callback: Function) {
-//     if (whiteList.indexOf(origin) !== -1 || !origin) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-// };
-
 const whiteList = ['https://magenta-chaja-b4c1b3.netlify.app'];
 
 const corsOptions = {
-  origin: function (origin: string, callback: Function) {
+  origin: function (origin: any, callback: Function) {
     if (whiteList.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
@@ -58,6 +46,18 @@ const corsOptions = {
     }
   },
 };
+
+// const whiteList = ['https://magenta-chaja-b4c1b3.netlify.app'];
+
+// const corsOptions = {
+//   origin: function (origin: string, callback: Function) {
+//     if (whiteList.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+// };
 
 // Função de middleware para adicionar um delay
 function delayMiddleware(_req: any, _res: any, next: Function) {
