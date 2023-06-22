@@ -27,15 +27,13 @@ import fornecedores from './src/routes/fornecedores/fornecedorRoutes';
 import pessoaReceber from './src/routes/fornecedores/PessoaReceberRoutes';
 import resetPassword from './src/routes/tokens/resetPasswordRoutes';
 
-// let whiteList: any = [];
+let whiteList: any = [];
 
-// if (process.env.NODE_ENV == 'production') {
-//   whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app'];
-// } else {
-//   whiteList = ['http://localhost:3001'];
-// }
-
-const whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app'];
+if (process.env.NODE_ENV == 'production') {
+  whiteList = ['https://magenta-chaja-b4c1b3.netlify.app'];
+} else {
+  whiteList = ['http://localhost:3001'];
+}
 
 const corsOptions = {
   origin: function (origin: any, callback: Function) {
