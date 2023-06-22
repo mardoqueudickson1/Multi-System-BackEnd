@@ -95,7 +95,7 @@ class FuncionarioController {
             try {
                 const rowsUpdated = yield (0, database_1.default)('funcionario').where({ id }).update(req.body);
                 if (rowsUpdated === 0) {
-                    res.status(404).json({ message: 'funcionario not found' });
+                    res.status(404).json({ message: 'funcionario NOT found' });
                     return;
                 }
                 const empresa = yield (0, database_1.default)('funcionario').where({ id }).first();

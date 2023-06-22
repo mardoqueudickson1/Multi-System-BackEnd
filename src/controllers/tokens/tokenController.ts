@@ -7,9 +7,7 @@ dotenv.config();
 
 class TokenController {
   async store(req: Request, res: Response) {
-    const { email, password, entity } = req.body; // Recebe os dados de email, senha e tipo de entidade a ser autenticada
-
-    console.log(email, password, entity);
+    const { email, password, entity } = req.body;
 
     // Verifica se os dados foram passados corretamente
     if (!email || !password || !entity) {

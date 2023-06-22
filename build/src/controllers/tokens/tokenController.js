@@ -20,8 +20,7 @@ dotenv_1.default.config();
 class TokenController {
     store(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, password, entity } = req.body; // Recebe os dados de email, senha e tipo de entidade a ser autenticada
-            console.log(email, password, entity);
+            const { email, password, entity } = req.body;
             // Verifica se os dados foram passados corretamente
             if (!email || !password || !entity) {
                 return res.status(401).json({
@@ -42,21 +41,23 @@ class TokenController {
                         errors: ['Tipo de entidade inválido'],
                     });
             }
-            // Faz uma consulta no banco de dados buscando um usuário com o email informado na tabela correspondente à entidade
             const [user] = yield (0, database_1.default)(table).where('email', email);
-            // Verifica se o usuário existe e se a senha informada está correta
             if (!user) {
                 return res.status(401).json({
-                    errors: ['Credenciais inválidas na db'],
+                    errors: ['Credenciais inválidas'],
                 });
             }
+            const secret = '123455';
+            // #TODO TIRAR ISSO
+            const expiresIn = 3600;
+            const defaultPassword = '12345';
             const senhaCorreta = yield bcryptjs_1.default.compare(password, user.password_hash);
+            const ismatchPassword = yield bcryptjs_1.default.compare(defaultPassword, user.password_hash);
             if (!senhaCorreta) {
                 return res.status(401).json({
-                    errors: ['Credenciais inválidas na db'],
+                    errors: ['Senha inválidas '],
                 });
             }
-            // Define os dados que serão armazenados no token
             const data = {
                 id: user.id,
                 n_funcionario: user.n_funcionario,
@@ -76,9 +77,33 @@ class TokenController {
                 endereco: user.endereco,
                 entity,
             };
-            const secret = '123455';
-            // #TODO TIRAR ISSO
-            const expiresIn = 3600;
+            if (ismatchPassword) {
+                const token = jsonwebtoken_1.default.sign(data, secret, { expiresIn });
+                // Retorna o token e as informações do usuário em um objeto JSON
+                return res.json({
+                    redirect: true,
+                    token,
+                    user: {
+                        nome: user.nome,
+                        id: user.id,
+                        email: user.email,
+                        sobrenome: user.sobrenome,
+                        role_id: user.role_id,
+                        departamento_id: user.departamento_id,
+                        nif: user.nif,
+                        telefone: user.telefone,
+                        data_de_nascimento: user.data_de_nascimento,
+                        data_de_contratacao: user.data_de_contratacao,
+                        salario: user.salario,
+                        educacao: user.educacao,
+                        bio: user.bio,
+                        linguas_falada: user.linguas_falada,
+                        ativo: user.ativo,
+                        endereco: user.endereco,
+                        entity,
+                    },
+                });
+            }
             // Gera o token com os dados definidos anteriormente e a chave secreta armazenada nas variáveis de ambiente
             const token = jsonwebtoken_1.default.sign(data, secret, { expiresIn });
             // Retorna o token e as informações do usuário em um objeto JSON

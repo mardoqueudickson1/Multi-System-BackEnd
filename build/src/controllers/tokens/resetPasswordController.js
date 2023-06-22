@@ -41,21 +41,29 @@ const hashPassWord_1 = require("../../utils/hashPassWord");
 class PasswordResetController {
     resetPassword(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { token, password } = req.body;
-            const password_hash = (0, hashPassWord_1.generateHash)(password);
             try {
+                const { token, password } = req.body;
+                const password_hash = (0, hashPassWord_1.generateHash)(password);
                 const secretKey = process.env.TOKEN_SECRET || '';
                 const decoded = jsonwebtoken_1.default.verify(token, secretKey);
                 const { id, email } = decoded;
-                yield (0, database_1.default)('users').where({ id, email }).update({ password_hash: password_hash });
-                res.status(200).json({ message: 'Senha alterada com sucesso' });
+                const rowsUpdated = yield (0, database_1.default)('funcionario').where({ id }).update({ password_hash: password_hash });
+                if (rowsUpdated === 0) {
+                    res.status(404).json({ message: 'funcionario not found' });
+                    return;
+                }
+                res.status(200).json({
+                    email: email,
+                    message: 'Senha alterada com sucesso',
+                });
             }
             catch (error) {
+                console.log(error);
                 if (error instanceof jsonwebtoken_1.TokenExpiredError) {
                     res.status(400).json({ message: 'Token expirado' });
                 }
                 else {
-                    res.status(400).json({ message: 'Token inválido' });
+                    res.status(400).json({ message: 'ERRO no servidor' });
                 }
             }
         });

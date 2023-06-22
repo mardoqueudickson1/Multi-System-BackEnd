@@ -30,7 +30,9 @@ const despachoRoutes_1 = __importDefault(require("./src/routes/estoque/despachoR
 const fornecedorRoutes_1 = __importDefault(require("./src/routes/fornecedores/fornecedorRoutes"));
 const PessoaReceberRoutes_1 = __importDefault(require("./src/routes/fornecedores/PessoaReceberRoutes"));
 const resetPasswordRoutes_1 = __importDefault(require("./src/routes/tokens/resetPasswordRoutes"));
-const whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app'];
+//   whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app'];
+//   whiteList = ['http://localhost:3001'];
+const whiteList = ['https://main--magenta-chaja-b4c1b3.netlify.app', 'http://localhost:3000'];
 const corsOptions = {
     origin: function (origin, callback) {
         if (whiteList.indexOf(origin) !== -1 || !origin) {
@@ -80,9 +82,8 @@ class App {
         this.app.use('/empresa/filha/despacho', despachoRoutes_1.default);
         this.app.use('/empresa/filha/fornecedores', fornecedorRoutes_1.default);
         this.app.use('/empresa/filha/pessoareceber', PessoaReceberRoutes_1.default);
-        this.app.use('/empresa/filha/reset-password', resetPasswordRoutes_1.default);
+        this.app.use('/empresa/filha/alterar-password', resetPasswordRoutes_1.default);
     }
 }
 exports.App = App;
 exports.default = new App().app;
-// BBBBBBBBBBBbb
