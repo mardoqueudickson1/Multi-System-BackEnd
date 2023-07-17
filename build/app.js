@@ -30,14 +30,14 @@ const despachoRoutes_1 = __importDefault(require("./src/routes/estoque/despachoR
 const fornecedorRoutes_1 = __importDefault(require("./src/routes/fornecedores/fornecedorRoutes"));
 const PessoaReceberRoutes_1 = __importDefault(require("./src/routes/fornecedores/PessoaReceberRoutes"));
 const resetPasswordRoutes_1 = __importDefault(require("./src/routes/tokens/resetPasswordRoutes"));
+const sendEmailResetRouter_1 = __importDefault(require("./src/routes/sendEmail/sendEmailResetRouter"));
 let whiteList = [];
 if (process.env.NODE_ENV == 'production') {
     whiteList = ['https://magenta-chaja-b4c1b3.netlify.app'];
 }
 else {
-    whiteList = ['http://localhost:3001'];
+    whiteList = ['http://localhost:3000'];
 }
-// const whiteList = ['https://magenta-chaja-b4c1b3.netlify.app'];
 const corsOptions = {
     origin: function (origin, callback) {
         if (whiteList.indexOf(origin) !== -1 || !origin) {
@@ -48,19 +48,8 @@ const corsOptions = {
         }
     },
 };
-// const whiteList = ['https://magenta-chaja-b4c1b3.netlify.app'];
-// const corsOptions = {
-//   origin: function (origin: string, callback: Function) {
-//     if (whiteList.indexOf(origin) !== -1 || !origin) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-// };
-// Função de middleware para adicionar um delay
 function delayMiddleware(_req, _res, next) {
-    const delay = 50; // Delay de 1 segundo
+    const delay = 50;
     setTimeout(next, delay);
 }
 // Classe da aplicação principal
@@ -98,6 +87,7 @@ class App {
         this.app.use('/empresa/filha/fornecedores', fornecedorRoutes_1.default);
         this.app.use('/empresa/filha/pessoareceber', PessoaReceberRoutes_1.default);
         this.app.use('/empresa/filha/alterar-password', resetPasswordRoutes_1.default);
+        this.app.use('empresa/filha/email', sendEmailResetRouter_1.default);
     }
 }
 exports.App = App;
