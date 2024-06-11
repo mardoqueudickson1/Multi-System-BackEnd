@@ -21,14 +21,13 @@ class TokenController {
     store(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { email, password, entity } = req.body;
-            // Verifica se os dados foram passados corretamente
+            console.log('Logou: ', req.body);
             if (!email || !password || !entity) {
                 return res.status(401).json({
                     errors: ['Credenciais inválidas'],
                 });
             }
-            let table; // Variável para armazenar o nome da tabela da entidade a ser autenticada
-            // Define o nome da tabela da entidade de acordo com o tipo passado na requisição
+            let table;
             switch (entity) {
                 case 'funcionario':
                     table = 'funcionario';
@@ -48,14 +47,13 @@ class TokenController {
                 });
             }
             const secret = '123455';
-            // #TODO TIRAR ISSO
             const expiresIn = 3600;
             const defaultPassword = '12345';
             const senhaCorreta = yield bcryptjs_1.default.compare(password, user.password_hash);
             const ismatchPassword = yield bcryptjs_1.default.compare(defaultPassword, user.password_hash);
             if (!senhaCorreta) {
                 return res.status(401).json({
-                    errors: ['Senha inválidas '],
+                    errors: ['Senha inválidas # '],
                 });
             }
             const data = {
@@ -79,7 +77,6 @@ class TokenController {
             };
             if (ismatchPassword) {
                 const token = jsonwebtoken_1.default.sign(data, secret, { expiresIn });
-                // Retorna o token e as informações do usuário em um objeto JSON
                 return res.json({
                     redirect: true,
                     token,
@@ -100,13 +97,11 @@ class TokenController {
                         linguas_falada: user.linguas_falada,
                         ativo: user.ativo,
                         endereco: user.endereco,
-                        entity,
+                        // entity,
                     },
                 });
             }
-            // Gera o token com os dados definidos anteriormente e a chave secreta armazenada nas variáveis de ambiente
             const token = jsonwebtoken_1.default.sign(data, secret, { expiresIn });
-            // Retorna o token e as informações do usuário em um objeto JSON
             return res.json({
                 token,
                 user: {
@@ -126,7 +121,7 @@ class TokenController {
                     linguas_falada: user.linguas_falada,
                     ativo: user.ativo,
                     endereco: user.endereco,
-                    entity,
+                    // entity,
                 },
             });
         });

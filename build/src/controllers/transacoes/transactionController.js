@@ -13,29 +13,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransacoesController = void 0;
-const knex_1 = __importDefault(require("knex"));
 const database_1 = __importDefault(require("../../config/database"));
-// import { parseISO } from 'date-fns';
 class TransacoesController {
     show(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield database_1.default.raw(`
-      SELECT *, to_char(transacoes.updated_at, 'DD-MM-YYYY') as data_formatada 
-      FROM transacoes
-      ORDER BY transacoes.updated_at DESC
-    `);
-            const dados = result.rows.map((row) => (Object.assign(Object.assign({}, row), { data_formatada: row.data_formatada.toString() })));
-            res.status(201).json(dados);
+            try {
+                const result = yield database_1.default.raw(`
+        SELECT *, strftime('%d-%m-%Y', transacoes.updated_at) as data_formatada 
+        FROM transacoes
+        ORDER BY transacoes.updated_at DESC
+      `);
+                if (!result.rows) {
+                    return res.status(404).json({ message: 'Nenhuma transação encontrada' });
+                }
+                const dados = result.rows.map((row) => (Object.assign(Object.assign({}, row), { data_formatada: row.data_formatada.toString() })));
+                res.status(200).json(dados);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: 'Erro do servidor' });
+            }
         });
     }
     // Listagem de transações
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = Number(req.params.id);
-            const transacoes = yield (0, database_1.default)('transacoes')
-                .select('transacoes.*', (0, knex_1.default)("to_char(transacoes.updated_at, 'DD-MM-YYYY') as data_formatada"))
-                .where({ id });
-            return res.json(transacoes);
+            try {
+                const transacoes = yield (0, database_1.default)('transacoes')
+                    .select('transacoes.*', database_1.default.raw("strftime('%d-%m-%Y', transacoes.updated_at) as data_formatada"))
+                    .where({ id });
+                if (!transacoes.length) {
+                    return res.status(404).json({ message: 'Transação não encontrada' });
+                }
+                return res.json(transacoes);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: 'Erro do servidor' });
+            }
         });
     }
     // Criação de transações
@@ -43,12 +59,6 @@ class TransacoesController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { descricao, valor, tipo, empresa_filha_id } = req.body;
-                console.log(valor);
-                // Verifica se a conta informada pertence à empresa filha informada
-                // if (!conta) {
-                //   return res.status(400).json({ message: 'Conta não encontrada para a empresa filha informada.' });
-                // }
-                // Cadastra a transação na tabela 'transacoes'
                 const [id] = yield (0, database_1.default)('transacoes')
                     .insert({
                     descricao,
@@ -57,9 +67,11 @@ class TransacoesController {
                     empresa_filha_id,
                 })
                     .returning('id');
-                // Atualiza o saldo da conta informada #TODO tenho de trabalhar aqui mais tarde
                 if (tipo === 'receita') {
                     const conta = yield (0, database_1.default)('contas').where('tipo', 'ativo').first();
+                    if (!conta) {
+                        return res.status(404).json({ message: 'Conta ativa não encontrada' });
+                    }
                     const saldoAtual = conta.saldo;
                     const novoSaldo = saldoAtual + valor;
                     yield (0, database_1.default)('contas').where('tipo', 'ativo').update({
@@ -72,6 +84,9 @@ class TransacoesController {
                 }
                 else if (tipo === 'despesa') {
                     const conta = yield (0, database_1.default)('contas').where('tipo', 'passivo').first();
+                    if (!conta) {
+                        return res.status(404).json({ message: 'Conta passiva não encontrada' });
+                    }
                     const saldoAtual = conta.saldo;
                     const novoSaldo = saldoAtual - valor;
                     yield (0, database_1.default)('contas').where('tipo', 'passivo').update({
@@ -85,53 +100,25 @@ class TransacoesController {
                 return res.status(201).json('CADASTRADO com SUCESSO');
             }
             catch (error) {
-                console.log(error);
+                console.error(error);
+                res.status(500).json({ message: 'Erro do servidor' });
             }
         });
     }
-    // // Atualização de transações
-    // async update(request: Request, response: Response) {
-    //   const { id } = request.params;
-    //   const { descricao, valor, tipo, contas } = request.body;
-    //   // Atualiza a transação com o ID especificado
-    //   await db('transacoes').where('id', id).update({
-    //     descricao,
-    //     valor,
-    //     tipo,
-    //   });
-    //   // Remove todas as associações da transação com as contas
-    //   await db('contas_transacoes').where('id_transacao', id).delete();
-    //   // Cria um array com os IDs das contas associadas à transação atualizada
-    //   const contasTransacoes = contas.map((conta_id: number) => {
-    //     return {
-    //       id_conta: conta_id,
-    //       id_transacao: Number(id),
-    //     };
-    //   });
-    //   // Insere as novas associações no banco de dados
-    //   await db('contas_transacoes').insert(contasTransacoes);
-    //   // Retorna a transação atualizada com as contas associadas
-    //   return response.json({
-    //     id: Number(id),
-    //     descricao,
-    //     valor,
-    //     tipo,
-    //     contas,
-    //   });
-    // }
-    //Apaga a trasação
+    // Apaga a transação
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = Number(req.params.id);
             try {
                 const rowsDeleted = yield (0, database_1.default)('transacoes').where({ id }).delete();
                 if (rowsDeleted === 0) {
-                    res.status(404).json({ message: 'Transação not found' });
+                    res.status(404).json({ message: 'Transação não encontrada' });
                     return;
                 }
                 res.status(204).send('APAGADO COM SUCESSO');
             }
             catch (error) {
+                console.error(error);
                 res.status(500).json({ message: 'Erro do servidor' });
             }
         });

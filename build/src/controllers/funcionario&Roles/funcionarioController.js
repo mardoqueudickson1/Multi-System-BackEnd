@@ -64,7 +64,7 @@ class FuncionarioController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const password = '12345';
+                const password = 'palavra';
                 const senha = (0, hashPassWord_1.generateHash)(password);
                 //Gera número aleatório para cada funcionário com prefixo do ano atual
                 const aleatorio = Math.floor(Math.random() * (10 + 20) + 10);

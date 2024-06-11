@@ -27,13 +27,20 @@ const database_1 = __importDefault(require("../../config/database"));
 //   }
 exports.default = {
     index(_req, res) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
-            const contaAtivo = yield (0, database_1.default)('contas').where('tipo', 'ativo').first();
-            const contaPassivo = yield (0, database_1.default)('contas').where('tipo', 'passivo').first();
-            const ativos = contaAtivo.saldo;
-            const passivos = contaPassivo.saldo;
-            const balanco_geral = ativos - passivos;
-            return res.json({ ativos, passivos, balanco_geral });
+            try {
+                const contaAtivo = yield (0, database_1.default)('contas').where('tipo', 'ativo').first();
+                const contaPassivo = yield (0, database_1.default)('contas').where('tipo', 'passivo').first();
+                const ativos = (_a = contaAtivo === null || contaAtivo === void 0 ? void 0 : contaAtivo.saldo) !== null && _a !== void 0 ? _a : 0;
+                const passivos = (_b = contaPassivo === null || contaPassivo === void 0 ? void 0 : contaPassivo.saldo) !== null && _b !== void 0 ? _b : 0;
+                const balanco_geral = ativos - passivos;
+                return res.json({ ativos, passivos, balanco_geral });
+            }
+            catch (error) {
+                console.error('Error:', error);
+                return res.status(500).json({ message: 'Internal Server Error' });
+            }
         });
     },
 };

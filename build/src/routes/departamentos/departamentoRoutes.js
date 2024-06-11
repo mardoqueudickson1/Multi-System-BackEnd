@@ -4,9 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-// import DepartamentoController from '../../controllers/departamentos/departamentocontroller';
-const sendEmailReset_1 = __importDefault(require("../../controllers/sendEmail/sendEmailReset"));
+const departamentocontroller_1 = __importDefault(require("../../controllers/departamentos/departamentocontroller"));
+// import sendemaiReset from '../../controllers/sendEmail/sendEmailReset';
 const router = (0, express_1.default)();
-// router.post('/', DepartamentoController.create);
-router.post('/', sendEmailReset_1.default.sendEmail);
+router.post('/', departamentocontroller_1.default.create);
+router.get('/', departamentocontroller_1.default.index);
+// router.post('/', sendemaiReset.sendEmail);
 exports.default = router;
