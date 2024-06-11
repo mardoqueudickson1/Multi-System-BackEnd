@@ -59,6 +59,7 @@ export class FuncionarioController {
   //Cria a funcionário
   public async create(req: Request, res: Response): Promise<void> {
     try {
+      console.log(res);
       const password = '12345';
       const senha: string = generateHash(password);
       //Gera número aleatório para cada funcionário com prefixo do ano atual
@@ -83,7 +84,7 @@ export class FuncionarioController {
       res.status(201).json(novo);
     } catch (error) {
       res.status(500).json({ message: 'Erro do servidor ao criar' });
-      console.log(error);
+      console.log(res);
     }
   }
 
